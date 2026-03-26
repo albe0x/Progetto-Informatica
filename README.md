@@ -13,5 +13,5 @@
 - React(con vite)
 - Backend Node
 
-## Oridne implementazione
+## Ordine implementazione
 -
