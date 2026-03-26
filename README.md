@@ -1,5 +1,9 @@
 # Progetto-Informatica
 
+Per avviare
+
+docker-compose up
+
 # Real time chat
 ## Appunti
 - Non chiamate o input/output vocali
