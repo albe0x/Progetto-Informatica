@@ -14,4 +14,15 @@
 - Backend Node
 
 ## Ordine implementazione
--
+
+
+-RESTFUL API
+-DB TABLES
+
+
+tables: 
+
+
+-- User
+  id
+
