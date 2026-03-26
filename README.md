@@ -8,7 +8,7 @@
 - Post
 - Login
 
-## Strumenti utilizati
+## Strumenti utilizzati
 - DB PostgreSQL
 - React(con vite)
 - Backend Node
