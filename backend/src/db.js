@@ -14,7 +14,7 @@ module.exports = {
 
 /*
 async function getUser() {
-  const res = await db.query('SELECT * FROM users WHERE id = $1', [1]);
+  const res = await db.query('SELECT * FROM users WHERE nome = $1 AND cognome = $2 ', [1, 2]);
   console.log(res.rows[0]);
 }
  */
