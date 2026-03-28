@@ -11,6 +11,8 @@ export default defineConfig({
     babel({ presets: [reactCompilerPreset()] })
   ],
   server: {
-    allowedHosts: ['app.albe0x.com']
+    allowedHosts: true,
+    host: true, 
+    strictPort: true
   }
 })
