@@ -12,4 +12,4 @@ else
     cd "$TARGET_DIR"
 fi
 
-docker-compose up
+docker compose up --build
