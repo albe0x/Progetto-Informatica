@@ -1,5 +1,9 @@
 # Progetto-Informatica
 
+APP: https://app.albe0x.com/
+
+API: https://api.albe0x.com/
+
 Per avviare
 
 docker-compose up
