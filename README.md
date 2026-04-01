@@ -36,12 +36,15 @@ docker-compose up
 - POST 		/logout
 - GET 		/me
 
+<br>
+
 - GET 		/user
 - GET 		/user/username
 - POST		/user
 - PUT		  /user/username
 - DELETE	/user/username
 
+<br>
 
 - GET 		/post
 - GET 		/post/:id_post
@@ -49,6 +52,7 @@ docker-compose up
 - PUT		  /post/:id_post
 - DELETE	/post/:id_post
 
+<br>
 
 - GET 		/message
 - GET 		/message/:id_message
