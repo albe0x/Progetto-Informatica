@@ -32,29 +32,29 @@ docker-compose up
 
 ## API END POINTS:
 
-POST 		/login
-POST 		/logout
-GET 		/me
+- POST 		/login
+- POST 		/logout
+- GET 		/me
 
-GET 		/user
-GET 		/user/username
-POST		/user
-PUT		  /user/username
-DELETE	/user/username
-
-
-GET 		/post
-GET 		/post/:id_post
-POST		/post
-PUT		  /post/:id_post
-DELETE	/post/:id_post
+- GET 		/user
+- GET 		/user/username
+- POST		/user
+- PUT		  /user/username
+- DELETE	/user/username
 
 
-GET 		/message
-GET 		/message/:id_message
-POST		/message
-PUT		  /message/:id_message
-DELETE	/message/:id_message
+- GET 		/post
+- GET 		/post/:id_post
+- POST		/post
+- PUT		  /post/:id_post
+- DELETE	/post/:id_post
+
+
+- GET 		/message
+- GET 		/message/:id_message
+- POST		/message
+- PUT		  /message/:id_message
+- DELETE	/message/:id_message
 
 
 
