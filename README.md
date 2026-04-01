@@ -75,3 +75,9 @@ GET /post/user/:id_user
 GET /user/search?q=[]
 
 
+
+Header http con user id:
+Authorization 
+
+
+tutto viagga in JSON con i nomi degli attributi ugalui a qulli edl db
