@@ -28,9 +28,18 @@ docker-compose up
 -DB TABLES
 
 
-tables: 
 
 
--- User
-  id
+API NON DESCRITTE 
+
+
+GET /message/conversation/:id_partner: 
+
+GET /message/inbox: 
+
+3. Logica del FEED
+GET /post/user/:id_user
+4. Ricerca e Social
+GET /user/search?q=[]
+
 
