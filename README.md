@@ -30,7 +30,35 @@ docker-compose up
 
 
 
-API NON DESCRITTE 
+## API END POINTS:
+
+POST 		/login
+POST 		/logout
+GET 		/me
+
+GET 		/user
+GET 		/user/username
+POST		/user
+PUT		  /user/username
+DELETE	/user/username
+
+
+GET 		/post
+GET 		/post/:id_post
+POST		/post
+PUT		  /post/:id_post
+DELETE	/post/:id_post
+
+
+GET 		/message
+GET 		/message/:id_message
+POST		/message
+PUT		  /message/:id_message
+DELETE	/message/:id_message
+
+
+
+# API NON DESCRITTE 
 
 
 GET /message/conversation/:id_partner: 
