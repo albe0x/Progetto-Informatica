@@ -1,18 +1,35 @@
-// src/middleware/authMiddleware.js
+const db = require('../db');
 
-const checkAuth = (req, res, next) => {
-    const userId = req.headers['authorization']; // Legge l'ID dall'header
+const checkAuth = async (req, res, next) => {
+    const authorization = req.headers['authorization'];
 
-    if (!userId) {
-        return res.status(401).json({ error: "Accesso negato: ID mancante" });
+    if (!authorization) {
+        return res.status(401).json({ error: "Accesso negato: authorization mancante" });
     }
 
-    // Se l'ID c'è, lo "attacchiamo" alla richiesta così il controller sa chi è l'utente
-    req.user = { id: userId }; 
-    //TODO GET USER
+    try{
+        const sql = `
+            SELECT id_user, username
+            FROM users
+            WHERE "authorizationToken" = $1
+        ;`
 
-    // Passiamo al prossimo passaggio (il controller)
-    next();
+        const result = await db.query(sql, [authorization]);
+        const user = result.rows[0];
+
+        if (!user) {
+            return res.status(401).json({ error: "Sessione non valida" });
+        }
+
+        req.user = { 
+            id_user: user.id_user, 
+            username: user.username 
+        };
+        next();
+
+    } catch {
+        return res.status(500).json({ error: "Errore interno" });
+    }
 };
 
 module.exports = checkAuth;
