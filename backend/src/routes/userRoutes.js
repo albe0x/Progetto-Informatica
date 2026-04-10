@@ -15,9 +15,12 @@ router.get('/', checkAuth, (req, res) => res.status(501).json({ message: `Funzio
 // GET /api/user/search?q=[] (Ricerca utenti)
 router.get('/search', checkAuth, async(req, res) => {
     try {
+        if (!req.query.q || req.query.q.trim() === "") {
+            return res.status(200).json([]); // Restituisci un array vuoto
+        }
         const result = await db.query(
             `SELECT id_user, username, "displayName", bio, "createdAt" FROM users WHERE username Ilike $1 OR "displayName" Ilike $1 LIMIT 50`, 
-            ['%'+req.query.q+'%']
+            ['%' + req.query.q + '%']
         );
         return res.status(200).json(result.rows)
     } catch(err) {
