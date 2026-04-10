@@ -6,7 +6,6 @@ const checkAuth = require('../middleware/authMiddleware');
 
 
 
-
 // tutti
 // GET /api/user (Lista utenti)
 router.get('/', checkAuth, (req, res) => res.status(501).json({ message: `Funzione non implementata` }));
