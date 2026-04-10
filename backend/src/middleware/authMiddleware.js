@@ -22,7 +22,7 @@ const checkAuth = async (req, res, next) => {
         }
 
         req.user = { 
-            id_user: user.id_user, 
+            id_user: user.id_user,   //req.user.id_user
             username: user.username 
         };
         next();
