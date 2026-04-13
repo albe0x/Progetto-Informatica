@@ -27,7 +27,8 @@ const checkAuth = async (req, res, next) => {
         };
         next();
 
-    } catch {
+    } catch (err) {
+        console.log('Error in checkAuth:', err);
         return res.status(500).json({ error: "Errore interno" });
     }
 };

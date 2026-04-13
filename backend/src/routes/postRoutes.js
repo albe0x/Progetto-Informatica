@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const checkAuth = require('../middleware/authMiddleware');
+const recommendationHelpers = require('../helpers/recommendationHelpers');
 
 /*
  * I post sono accessibili a tutti gli utenti loggati
@@ -12,7 +13,23 @@ const checkAuth = require('../middleware/authMiddleware');
 //to do implemnet accual post racomdnation
 // tutti
 // GET /api/post (Feed globale)
-router.get('/', checkAuth, (req, res) => res.json([1,6,3,8,10,2]));
+router.get('/', checkAuth, async (req, res) => {
+    try {
+        sql = ` SELECT *
+                FROM posts
+                WHERE id_post = ANY($1::int[])
+                `
+        const postsIds = recommendationHelpers.getRecommendedPosts(req);
+        const result = await db.query(sql, [postsIds])
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: "Post non trovato" });
+        }
+        return res.json(result.rows)
+    } catch(err) {
+        console.log(err)
+        return res.status(500).json({ error: "Errore recupero post" });
+    }
+});
 
 // tutti
 // GET /api/post/user/:id_user (Feed specifico di un utente)
@@ -26,7 +43,7 @@ router.get('/user/:id_user', checkAuth, async (req, res) => {
         return res.json(result.rows)
     } catch(err) {
         console.log(err)
-        return res.status(500).json({ error: "Errore creazione post" });
+        return res.status(500).json({ error: "Errore recupero post" });
     }
 })
 
@@ -46,9 +63,8 @@ router.get('/:id_post', checkAuth, async (req, res) => {
         return res.json(result.rows[0])
     } catch(err) {
         console.log(err)
-        return res.status(500).json({ error: "Errore creazione post" });
+        return res.status(500).json({ error: "Errore recupero post" });
     }
-
 });
 
 

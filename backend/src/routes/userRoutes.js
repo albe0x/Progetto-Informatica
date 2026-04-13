@@ -18,7 +18,7 @@ router.get('/search', checkAuth, async(req, res) => {
             return res.status(200).json([]); // Restituisci un array vuoto
         }
         const result = await db.query(
-            `SELECT id_user, username, "displayName", bio, "createdAt" FROM users WHERE username Ilike $1 OR "displayName" Ilike $1 LIMIT 50`, 
+            `SELECT id_user, username, "displayName", bio, "createdAt" FROM users WHERE username ILIKE $1 OR "displayName" ILIKE $1 LIMIT 50`, 
             ['%' + req.query.q + '%']
         );
         return res.status(200).json(result.rows)
