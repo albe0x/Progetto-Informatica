@@ -10,7 +10,7 @@ function PostGrid() {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': '27c8b3446c5cb3bfba4f652ab3642005022f49af81f3d976bf90ba01bd8a389a' //TEST TOCKEN
+            'Authorization': '2d350a6393ff55f39d1a9bdcb5166e4d094786a1467678cf271d090dbdea15fc' //TEST TOCKEN
         }
     })
       .then((response) => response.json())
