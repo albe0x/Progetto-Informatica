@@ -9,8 +9,8 @@ echo "--- [2/3] Configurazione Eseguibile ---"
 chmod +x serverDeploy.sh
 
 echo "--- [3/3] Reset e Riavvio Docker ---"
-# Usiamo il binario specifico che abbiamo scaricato
-docker-compose down --remove-orphans
-docker-compose up -d --build --force-recreate
+# Usiamo il percorso assoluto per essere sicuri al 100%
+/usr/local/bin/docker-compose down
+/usr/local/bin/docker-compose up -d --build --force-recreate
 
 echo "--- DEPLOY COMPLETATO ---"
