@@ -10,12 +10,8 @@ chmod +x serverDeploy.sh
 
 echo "--- [STEP 3] Riavvio container progetto ---"
 
-# Proviamo prima docker-compose (v1) poi docker compose (v2)
-if command -v docker-compose &> /dev/null
-then
-    docker-compose up -d --build
-else
-    docker compose up -d --build
-fi
+# Usiamo 'docker compose' (senza trattino) che è la versione moderna (V2)
+# e risolve il problema 'ContainerConfig'
+docker compose up -d --build
 
 echo "--- DEPLOY COMPLETATO ---"
