@@ -6,7 +6,7 @@ function PostGrid() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://api.albe0x.com/api/post' , {
+    fetch('https://api.albe0x.com/api/post' , {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
