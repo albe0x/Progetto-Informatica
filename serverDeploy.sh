@@ -1,15 +1,16 @@
 #!/bin/bash
 set -e
 
-REPO_URL="https://github.com/albe0x/Progetto-Informatica.git"
-TARGET_DIR="Progetto-Informatica"
+echo "--- [STEP 1] Aggiornamento sorgenti ---"
+# Siamo già dentro la cartella Progetto-Informatica quando Node lo chiama
+git fetch origin
+git reset --hard origin/main
 
-# 1. Clone or Pull updates
-if [ -d "$TARGET_DIR" ]; then
-    cd "$TARGET_DIR" && git pull
-else
-    git clone "$REPO_URL" "$TARGET_DIR"
-    cd "$TARGET_DIR"
-fi
+echo "--- [STEP 2] Verifica permessi ---"
+chmod +x serverDeploy.sh
 
-docker compose up --build
+echo "--- [STEP 3] Riavvio container progetto ---"
+# Lancia il compose del progetto (quello che sta qui dentro)
+docker compose up --build -d
+
+echo "--- DEPLOY COMPLETATO ---"
