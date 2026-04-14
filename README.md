@@ -1,5 +1,8 @@
 # Progetto-Informatica
 
+----> https://zyx.albe0x.com/
+Effettua il pull della repo e la esegue
+
 APP: https://app.albe0x.com/
 
 API: https://api.albe0x.com/
