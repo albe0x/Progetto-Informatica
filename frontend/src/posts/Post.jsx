@@ -8,7 +8,7 @@ function Post({ post }) {
         <p>{post.content}</p>
         <br />
         <div className="grid grid-cols-2" >
-            <p>{post.username}</p>
+            <p>{post.id_user}</p>
             <p>{post.createdAt}</p>
         </div>
     </div>
