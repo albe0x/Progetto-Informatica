@@ -1,2 +1,4 @@
-node_modules
+Progetto-Informatica/
+node_modules/
 databse/data/
+.env
