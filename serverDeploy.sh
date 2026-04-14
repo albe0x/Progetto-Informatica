@@ -9,10 +9,8 @@ echo "--- [2/3] Configurazione Eseguibile ---"
 chmod +x serverDeploy.sh
 
 echo "--- [3/3] Reset e Riavvio Docker ---"
-# Rimuove container vecchi o bloccati che causano conflitti
-docker compose down --remove-orphans
-
-# Ricrea tutto da zero ignorando i residui
-docker compose up -d --build --force-recreate
+# Usiamo il binario specifico che abbiamo scaricato
+docker-compose down --remove-orphans
+docker-compose up -d --build --force-recreate
 
 echo "--- DEPLOY COMPLETATO ---"
