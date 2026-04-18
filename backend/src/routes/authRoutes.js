@@ -25,7 +25,7 @@ router.post('/login', async (req, res, next) => {
     const user = result.rows[0];
 
     if (!user) {
-        return next(createError(401, "Password o nome utente sbagliato"));
+        return next(createError(401, "Credenziali non valide"));
     }
     
     const isMatch = await bcrypt.compare(password, user.passwordHash);
@@ -41,7 +41,7 @@ router.post('/login', async (req, res, next) => {
             username: username 
         });
     } else {
-        return next(createError(401, "Password o nome utente sbagliato"));
+        return next(createError(401, "Credenziali non valide"));
     }
     } catch (err) {
        return next(err);

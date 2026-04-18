@@ -88,6 +88,12 @@ router.post('/', checkAuth, async (req, res) => {
         const chatResult = await db.query(chatSql, [name]);
         const newChatId = chatResult.rows[0].id_chat;
 
+        const creatorSql = `
+            INSERT INTO chatmembers (id_chat, id_user)
+            VALUES ($1, $2)
+        `;
+        await db.query(creatorSql, [newChatId, req.user.id_user]);
+
         if (members.length > 0) {
             const memberSql = `
                 INSERT INTO chatmembers (id_chat, id_user)

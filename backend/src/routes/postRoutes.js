@@ -16,9 +16,6 @@ router.get('/', checkAuth, async (req, res, next) => {
                 `
         const postsIds = await recommendationHelpers.getRecommendedPosts(req);
         const result = await db.query(sql, [postsIds])
-        if (result.rowCount === 0) {
-            return next(createError(404, "Nessun post trovato"));
-        }
         return res.json(result.rows)
     } catch(err) {
         return next(err);
