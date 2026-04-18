@@ -19,7 +19,7 @@ router.get('/', checkAuth, async (req, res, next) => {
     }
 });
 
-router.get('/:id_chat/members/', checkAuth, async (req, res) => {
+router.get('/:id_chat/members/', checkAuth, async (req, res, next) => {
     try {
         const sql = `
                 SELECT u.id_user, u.username, cm."joinedAt"
@@ -38,7 +38,7 @@ router.get('/:id_chat/members/', checkAuth, async (req, res) => {
     }
 });
 
-router.get('/:id_chat/messages', checkAuth, async (req, res) => {
+router.get('/:id_chat/messages', checkAuth, async (req, res, next) => {
     const id_chat = req.params.id_chat;
     const id_user = req.user.id_user;
 
@@ -76,7 +76,7 @@ router.get('/:id_chat/messages', checkAuth, async (req, res) => {
     }
 });
 
-router.post('/', checkAuth, async (req, res) => {
+router.post('/', checkAuth, async (req, res, next) => {
     const { name, members = [] } = req.body;
 
     try {
