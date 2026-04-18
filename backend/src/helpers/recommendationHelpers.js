@@ -1,6 +1,6 @@
 const db = require('../db');
 
-async function getRecommendedPosts(req, db) {
+async function getRecommendedPosts(req) {
     try {
         const sql = `
             SELECT id_post 

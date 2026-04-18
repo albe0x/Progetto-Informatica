@@ -3,77 +3,72 @@ const router = express.Router();
 const db = require('../db');
 const checkAuth = require('../middleware/authMiddleware');
 const recommendationHelpers = require('../helpers/recommendationHelpers');
-
-/*
- * I post sono accessibili a tutti gli utenti loggati
- * checkAuth deve avvenire con successo.
-*/
+const createError = require('http-errors');
 
 
-//to do implemnet accual post racomdnation
 // tutti
 // GET /api/post (Feed globale)
-router.get('/', checkAuth, async (req, res) => {
+router.get('/', checkAuth, async (req, res, next) => {
     try {
-        sql = ` SELECT *
+        const sql = ` SELECT *
                 FROM posts
                 WHERE id_post = ANY($1::int[])
                 `
-        const postsIds = recommendationHelpers.getRecommendedPosts(req);
+        const postsIds = await recommendationHelpers.getRecommendedPosts(req);
         const result = await db.query(sql, [postsIds])
         if (result.rowCount === 0) {
-            return res.status(404).json({ error: "Post non trovato" });
+            return next(createError(404, "Nessun post trovato"));
         }
         return res.json(result.rows)
     } catch(err) {
-        console.log(err)
-        return res.status(500).json({ error: "Errore recupero post" });
+        return next(err);
     }
 });
 
 // tutti
 // GET /api/post/user/:id_user (Feed specifico di un utente)
-router.get('/user/:id_user', checkAuth, async (req, res) => {
+router.get('/user/:id_user', checkAuth, async (req, res, next) => {
     try {
-        sql = ` SELECT *
+        const sql = ` SELECT *
                 FROM posts
                 WHERE id_user = $1
                 `
         const result = await db.query(sql, [req.params.id_user])
+        if (result.rowCount === 0) {
+            return next(createError(404, "Nessun post trovato"));
+        }
         return res.json(result.rows)
     } catch(err) {
-        console.log(err)
-        return res.status(500).json({ error: "Errore recupero post" });
+        return next(err);
     }
 })
 
 
 // tutti
 // GET /api/post/:id_post (Dettaglio singolo post)
-router.get('/:id_post', checkAuth, async (req, res) => {
+router.get('/:id_post', checkAuth, async (req, res, next) => {
     try {
-        sql = ` SELECT *
+        const sql = ` SELECT *
                 FROM posts
                 WHERE id_post = $1
                 `
         const result = await db.query(sql, [req.params.id_post])
         if (result.rowCount === 0) {
-            return res.status(404).json({ error: "Post non trovato" });
+            return next(createError(404, "Nessun post trovato"));
         }
         return res.json(result.rows[0])
     } catch(err) {
-        console.log(err)
-        return res.status(500).json({ error: "Errore recupero post" });
+        return next(err);
     }
 });
 
 
 // solo proprietario
 // POST /api/post (Crea nuovo post)
-router.post('/', checkAuth, async(req, res) => {
+router.post('/', checkAuth, async(req, res, next) => {
     const {title, content, imageUrl} = req.body;
     try {
-        sql = ` INSERT INTO posts(id_user, title, content, "imageUrl")
+        const sql = ` INSERT INTO posts(id_user, title, content, "imageUrl")
                 VALUES ($1, $2, $3, $4)
                 RETURNING id_post
         `
@@ -84,19 +79,18 @@ router.post('/', checkAuth, async(req, res) => {
             id_post: newPostId 
         });
     } catch(err) {
-        console.log(err)
-        return res.status(500).json({ error: "Errore creazione post" });
+        return next(err);
     }
 });
 
 // solo proprietario
 // PUT /api/post/:id_post (Modifica post)
-router.put('/:id_post', checkAuth, (req, res) => res.status(501).json({ message: `Post ${req.params.id_post} modificato` }));
+router.put('/:id_post', checkAuth, (req, res, next) => next(createError(501, "PUT NON IMPLEMENTATA")));
 
 
 // solo proprietario
 // DELETE /api/post/:id_post (Elimina post)
-router.delete('/:id_post', checkAuth, (req, res) => res.status(501).json({ message: `Post ${req.params.id_post} eliminato` }));
+router.delete('/:id_post', checkAuth, (req, res, next) => next(createError(501, "DELETE NON IMPLEMENTATA")));
 
 
 module.exports = router;

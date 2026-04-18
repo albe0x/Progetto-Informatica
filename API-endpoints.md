@@ -17,7 +17,7 @@ Example:
   "password": "secret"
 }
 ```
-- Success response:
+- Success response (200):
 ```json
 {
   "message": "Login effettuato",
@@ -32,7 +32,7 @@ Example:
 ### `POST /api/auth/logout`
 - Auth: required
 - Request: no body
-- Response:
+- Response (200):
 ```json
 {
   "message": "Logout effettuato con successo"
@@ -41,7 +41,7 @@ Example:
 
 ### `GET /api/auth/me`
 - Auth: required
-- Response: current user object
+- Response (200): current user object
 - Example:
 ```json
 {
@@ -57,7 +57,7 @@ Example:
 ### `GET /api/chat/`
 - Auth: required
 - Returns chats joined by the current user
-- Response example:
+- Response (200) example:
 ```json
 [
   {
@@ -118,7 +118,7 @@ Example:
   "members": ["bob", "carol"]
 }
 ```
-- Response:
+- Response (201):
 ```json
 {
   "message": "Chat created successfully",
@@ -138,7 +138,7 @@ Example:
   "content": "Hi everyone!"
 }
 ```
-- Response example:
+- Response (201) example:
 ```json
 {
   "id_message": 12,
@@ -157,7 +157,7 @@ Example:
 ### `GET /api/post/`
 - Auth: required
 - Returns a feed of recommended posts
-- Response example:
+- Response (200) example:
 ```json
 [
   {
@@ -174,13 +174,13 @@ Example:
 - Auth: required
 - Path param: `id_user`
 - Returns all posts by that user
-- Response: array of post objects
+- Response (200): array of post objects
 
 ### `GET /api/post/:id_post`
 - Auth: required
 - Path param: `id_post`
 - Returns one post object
-- Response example:
+- Response (200) example:
 ```json
 {
   "id_post": 10,
@@ -206,7 +206,7 @@ Example:
   "imageUrl": "https://example.com/img.jpg"
 }
 ```
-- Response:
+- Response (201):
 ```json
 {
   "message": "Post creato",
@@ -236,7 +236,7 @@ Example:
 - Auth: required
 - Query param: `q` (search string)
 - Returns matching users
-- Response example:
+- Response (200) example:
 ```json
 [
   {
@@ -253,7 +253,7 @@ Example:
 - Auth: required
 - Path param: `username`
 - Returns a public user profile
-- Response example:
+- Response (200) example:
 ```json
 {
   "id_user": 3,
@@ -281,7 +281,7 @@ Example:
   "bio": "I love coding"
 }
 ```
-- Response:
+- Response (201):
 ```json
 {
   "message": "Utente creato"
@@ -303,7 +303,7 @@ Example:
   "bio": "Aggiornata bio"
 }
 ```
-- Response:
+- Response (200):
 ```json
 {
   "message": "Utente modificato"

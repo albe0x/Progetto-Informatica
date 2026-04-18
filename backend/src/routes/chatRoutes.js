@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const checkAuth = require('../middleware/authMiddleware');
+const createError = require('http-errors');
 
 
-router.get('/', checkAuth, async (req, res) => {
+router.get('/', checkAuth, async (req, res, next) => {
     try {
         const sql = ` SELECT c.id_chat, c.name , "joinedAt"
                 FROM chats c JOIN chatmembers cm ON c.id_chat = cm.id_chat
@@ -14,8 +15,7 @@ router.get('/', checkAuth, async (req, res) => {
         const result = await db.query(sql, [req.user.id_user])
         return res.json(result.rows)
     } catch(err) {
-        console.log(err)
-        return res.status(500).json({ error: "Errore recupero post" });
+        return next(err);
     }
 });
 
@@ -30,12 +30,11 @@ router.get('/:id_chat/members/', checkAuth, async (req, res) => {
             `;
         const result = await db.query(sql, [req.params.id_chat])
         if (result.rowCount === 0) {
-            return res.status(404).json({ error: "Post non trovato" });
+            return next(createError(404, "Membri della chat non trovati"));
         }
         return res.json(result.rows)
     } catch(err) {
-        console.log(err)
-        return res.status(500).json({ error: "Errore recupero post" });
+        return next(err);
     }
 });
 
@@ -50,7 +49,7 @@ router.get('/:id_chat/messages', checkAuth, async (req, res) => {
         );
 
         if (memberCheck.rowCount === 0) {
-            return res.status(403).json({ error: "Non hai i permessi per vedere questi messaggi" });
+            return next(createError(403, "Non hai i permessi per vedere questi messaggi"));
         }
 
         // 2. QUERY MESSAGGI: Recupera i messaggi e il nome del mittente
@@ -72,9 +71,8 @@ router.get('/:id_chat/messages', checkAuth, async (req, res) => {
 
         return res.json(result.rows);
 
-    } catch (err) {
-        console.error("Errore recupero messaggi:", err);
-        return res.status(500).json({ error: "Errore interno del server" });
+    } catch(err) {
+        return next(err);
     }
 });
 
@@ -105,13 +103,12 @@ router.post('/', checkAuth, async (req, res) => {
             id_chat: newChatId 
         });
 
-    } catch (err) {
-        console.error("Database Error:", err);
-        return res.status(500).json({ error: "Errore creazione chat" });
+    } catch(err) {
+        return next(err);
     }
 });
 
-router.post('/:id_chat/messages', checkAuth, async (req, res) => {
+router.post('/:id_chat/messages', checkAuth, async (req, res, next) => {
     const { id_chat } = req.params;
     const { content } = req.body;
     const id_sender = req.user.id_user;
@@ -126,9 +123,8 @@ router.post('/:id_chat/messages', checkAuth, async (req, res) => {
         const result = await db.query(sql, [id_chat, id_sender, content]);
         
         return res.status(201).json(result.rows[0]);
-    } catch (err) {
-        console.error("Error inserting message:", err);
-        return res.status(500).json({ error: "Errore durante l'invio del messaggio" });
+    } catch(err) {
+        return next(err);
     }
 });
 

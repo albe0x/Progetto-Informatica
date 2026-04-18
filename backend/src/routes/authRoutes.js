@@ -5,9 +5,10 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const checkAuth = require('../middleware/authMiddleware');
+const createError = require('http-errors');
 
 // POST /api/auth/login
-router.post('/login', async (req, res) => {
+router.post('/login', async (req, res, next) => {
     const { username, password} = req.body;
 
     if (!username || !password) {
@@ -24,7 +25,7 @@ router.post('/login', async (req, res) => {
     const user = result.rows[0];
 
     if (!user) {
-        return res.status(401).json({ message: "Password o nome utente sbagliato" });
+        return next(createError(401, "Password o nome utente sbagliato"));
     }
     
     const isMatch = await bcrypt.compare(password, user.passwordHash);
@@ -39,15 +40,16 @@ router.post('/login', async (req, res) => {
             token: token,
             username: username 
         });
-    } 
-        return res.status(401).json({ message: "Password o nome utente sbagliato" });
-    } catch {
-       return res.status(500).json({ error: "Errore durante il login" });
+    } else {
+        return next(createError(401, "Password o nome utente sbagliato"));
+    }
+    } catch (err) {
+       return next(err);
     }
 });
 
 // POST /api/auth/logout
-router.post('/logout', checkAuth, async (req, res) => {
+router.post('/logout', checkAuth, async (req, res, next) => {
     try {
         const sql = `
                 UPDATE users 
@@ -56,8 +58,8 @@ router.post('/logout', checkAuth, async (req, res) => {
             `;
         await db.query(sql, [req.user.id_user]);
         res.json({ message: "Logout effettuato con successo" });
-    } catch {
-        res.status(500).json({ error: "Errore durante il logout" });
+    } catch (err) {
+       return next(err);
     }
 });
 
