@@ -1,5 +1,6 @@
 # Backend API Endpoints
 
+Base URL: `http://api.albe0x.com/api`
 Base URL: `http://localhost:3000/api`
 
 ## Authentication
@@ -156,7 +157,7 @@ Example:
 
 ### `GET /api/post/`
 - Auth: required
-- Returns a feed of recommended posts
+- Returns a feed of recommended posts for the current user
 - Response (200) example:
 ```json
 [
@@ -165,7 +166,8 @@ Example:
     "id_user": 1,
     "title": "Hello",
     "content": "Post content",
-    "imageUrl": null
+    "imageUrl": null,
+    "username": "alice"
   }
 ]
 ```
@@ -174,7 +176,21 @@ Example:
 - Auth: required
 - Path param: `id_user`
 - Returns all posts by that user
-- Response (200): array of post objects
+- Response (200) example:
+```json
+[
+  {
+    "id_post": 10,
+    "id_user": 1,
+    "title": "Hello",
+    "content": "Post content",
+    "imageUrl": null,
+    "username": "alice"
+  }
+]
+```
+- Errors:
+  - `404` if no posts found for the user
 
 ### `GET /api/post/:id_post`
 - Auth: required
@@ -187,9 +203,12 @@ Example:
   "id_user": 1,
   "title": "Hello",
   "content": "Post content",
-  "imageUrl": null
+  "imageUrl": null,
+  "username": "alice"
 }
 ```
+- Errors:
+  - `404` if post not found
 
 ### `POST /api/post/`
 - Auth: required
