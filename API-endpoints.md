@@ -1,6 +1,6 @@
 # Backend API Endpoints
 
-Base URL: `http://api.albe0x.com/api`
+Base URL: `https://api.albe0x.com/api`
 Base URL: `http://localhost:3000/api`
 
 ## Authentication
