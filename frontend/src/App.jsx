@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import PostGrid from './posts/PostGrid';
+import PostGrid from './components/posts/PostGrid';
+
 function App() {
   const [count, setCount] = useState(0)
 
