@@ -1,16 +1,15 @@
 #!/bin/bash
 set -e
 
-echo "--- [1/3] Sincronizzazione Sorgenti ---"
+echo "Fetching latest changes from GitHub..."
 git fetch origin
 git reset --hard origin/main
 
-echo "--- [2/3] Configurazione Eseguibile ---"
+echo "Making script executable..."
 chmod +x serverDeploy.sh
 
-echo "--- [3/3] Reset e Riavvio Docker ---"
-# Usiamo il percorso assoluto per essere sicuri al 100%
+echo "Reset and restarting Docker..."
 /usr/local/bin/docker-compose down
 /usr/local/bin/docker-compose up -d --build --force-recreate
 
-echo "--- DEPLOY COMPLETATO ---"
+echo "Deploy completed successfully!"
