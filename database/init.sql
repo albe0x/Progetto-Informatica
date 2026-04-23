@@ -5,7 +5,8 @@ CREATE TABLE users (
     bio TEXT,
     "passwordHash" VARCHAR(255) NOT NULL,
     "authorizationToken" VARCHAR(255),
-    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "isSuperAdmin" BOOLEAN DEFAULT false
 );
 
 CREATE TABLE posts (
@@ -13,6 +14,7 @@ CREATE TABLE posts (
     id_user INT NOT NULL REFERENCES users(id_user) ON DELETE CASCADE,
     title TEXT NOT NULL,
     content TEXT NOT NULL,
+    likes INT DEFAULT 0,
     "imageUrl" VARCHAR(255),
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -39,3 +41,4 @@ CREATE TABLE messages (
     "isRead" BOOLEAN DEFAULT FALSE,
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+

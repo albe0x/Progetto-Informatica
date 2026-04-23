@@ -10,7 +10,7 @@ const createError = require('http-errors');
 // GET /api/post (Feed globale)
 router.get('/', checkAuth, async (req, res, next) => {
     try {
-        const sql = ` SELECT *, users.username
+        const sql = ` SELECT posts.*, users.username, posts.likes
                 FROM posts 
                 join users on posts.id_user = users.id_user
                 WHERE id_post = ANY($1::int[])
@@ -27,7 +27,7 @@ router.get('/', checkAuth, async (req, res, next) => {
 // GET /api/post/user/:id_user (Feed specifico di un utente)
 router.get('/user/:id_user', checkAuth, async (req, res, next) => {
     try {
-        const sql = ` SELECT *, users.username
+        const sql = ` SELECT posts.*, users.username, posts.likes
                 FROM posts
                 join users on posts.id_user = users.id_user
                 WHERE id_user = $1
@@ -47,7 +47,7 @@ router.get('/user/:id_user', checkAuth, async (req, res, next) => {
 // GET /api/post/:id_post (Dettaglio singolo post)
 router.get('/:id_post', checkAuth, async (req, res, next) => {
     try {
-        const sql = ` SELECT *, users.username
+        const sql = ` SELECT posts.*, users.username, posts.likes
                 FROM posts
                 join users on posts.id_user = users.id_user
                 WHERE id_post = $1

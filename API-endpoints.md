@@ -166,6 +166,7 @@ Example:
     "id_user": 1,
     "title": "Hello",
     "content": "Post content",
+    "likes": 5,
     "imageUrl": null,
     "username": "alice"
   }
@@ -184,6 +185,7 @@ Example:
     "id_user": 1,
     "title": "Hello",
     "content": "Post content",
+    "likes": 5,
     "imageUrl": null,
     "username": "alice"
   }
@@ -203,6 +205,7 @@ Example:
   "id_user": 1,
   "title": "Hello",
   "content": "Post content",
+  "likes": 5,
   "imageUrl": null,
   "username": "alice"
 }
@@ -263,7 +266,8 @@ Example:
     "username": "bob",
     "displayName": "Bob",
     "bio": "Developer",
-    "createdAt": "2026-01-01T00:00:00.000Z"
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "isSuperAdmin": false
   }
 ]
 ```
@@ -279,7 +283,8 @@ Example:
   "username": "bob",
   "displayName": "Bob",
   "bio": "Developer",
-  "createdAt": "2026-01-01T00:00:00.000Z"
+  "createdAt": "2026-01-01T00:00:00.000Z",
+  "isSuperAdmin": false
 }
 ```
 

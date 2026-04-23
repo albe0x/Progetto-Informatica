@@ -11,7 +11,7 @@ const createError = require('http-errors');
 router.get('/search', checkAuth, async(req, res, next) => {
     try {
         const result = await db.query(
-            `SELECT id_user, username, "displayName", bio, "createdAt" FROM users WHERE username ILIKE $1 OR "displayName" ILIKE $1 LIMIT 50`, 
+            `SELECT id_user, username, "displayName", bio, "createdAt", "isSuperAdmin" FROM users WHERE username ILIKE $1 OR "displayName" ILIKE $1 LIMIT 50`, 
             ['%' + (req.query.q || '') + '%']
         );
         return res.status(200).json(result.rows)
@@ -25,7 +25,7 @@ router.get('/search', checkAuth, async(req, res, next) => {
 router.get('/:username', checkAuth, async (req, res, next) => {
     try {
         const result = await db.query(
-            `SELECT id_user, username, "displayName", bio, "createdAt" FROM users WHERE username = $1`, 
+            `SELECT id_user, username, "displayName", bio, "createdAt", "isSuperAdmin" FROM users WHERE username = $1`, 
             [req.params.username]
         );
         if (result.rowCount === 0) {
