@@ -6,6 +6,12 @@ const useFetch = (baseUrl = '') => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  /*
+    * @param {string} url - Endpoint relativo (es. '/profile')
+    * @param {string} method - Metodo HTTP (es. 'GET', 'POST')
+    * @param {object} body - Corpo della richiesta (per POST/PUT)
+    * @param {object} customHeaders - Headers aggiuntivi (es. {'X-Custom': 'value'})
+  */
   const request = useCallback(async (url, method = 'GET', body = null, customHeaders = {}) => {
     setLoading(true);
     setError(null);
@@ -45,10 +51,3 @@ const useFetch = (baseUrl = '') => {
 };
 
 export default useFetch;
-
-/*
- const { request, data, loading, error } = useFetch('https://esempio.com');
-
- request('/profile', 'POST', {}, )
-
-*/

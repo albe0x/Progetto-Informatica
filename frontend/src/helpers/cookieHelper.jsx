@@ -1,3 +1,6 @@
+/**
+ * @param {string} name - Nome del cookie
+ */
 export const getCookie = (name) => {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -10,7 +13,6 @@ export const getCookie = (name) => {
  * @param {string} value - Valore (es. il token)
  * @param {number} days - Durata in giorni (opzionale)
  */
-
 export const setCookie = (name, value, days = 7) => {
   let expires = "";
   if (days) {
@@ -22,6 +24,9 @@ export const setCookie = (name, value, days = 7) => {
   document.cookie = `${name}=${value || ""}${expires}; path=/; SameSite=Lax`;
 };
 
+/**
+ * @param {string} name - Nome del cookie
+ */
 export const removeCookie = (name) => {
   document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
 };
