@@ -1,86 +1,88 @@
 # Progetto-Informatica
 
-----> https://zyx.albe0x.com/
-Effettua il pull della repo e la esegue
+A real-time chat application with posts and social features built with Node.js, React, PostgreSQL, and Docker.
 
-APP: https://app.albe0x.com/
+## Live Deployment
 
-API: https://api.albe0x.com/
+- **App**: https://app.albe0x.com/
+- **API**: https://api.albe0x.com/
 
-Per avviare
+## Features
 
+- 🔐 User authentication and authorization
+- 💬 Real-time chat with multiple users
+- 📝 Post creation and feed
+- 🔍 User search and profiles
+- 👤 User profiles with admin capabilities
+- ❤️ Post likes tracking
+
+## Tech Stack
+
+- **Backend**: Node.js + Express
+- **Frontend**: React + Vite
+- **Database**: PostgreSQL
+- **Deployment**: Docker + Docker Compose
+
+## Quick Start
+
+### Prerequisites
+- Docker and Docker Compose installed
+
+### Run the Application
+
+```bash
 docker-compose up
+```
 
-# Real time chat
-## Appunti
-- Non chiamate o input/output vocali
-- Chat in real time
-- Chat privata
-- Post
-- Login
+This will start:
+- PostgreSQL database on port 5432
+- Backend API on port 3000
+- Frontend application on port 5173
 
-## Strumenti utilizzati
-- DB PostgreSQL
-- React(con vite)
-- Backend Node
+## API Documentation
 
-## Ordine implementazione
+For detailed API endpoint documentation, see [API-endpoints.md](API-endpoints.md)
 
+### Main Endpoints
 
--RESTFUL API
--DB TABLES
+#### Authentication
+- `POST /api/auth/login` - User login
+- `POST /api/auth/logout` - User logout
+- `GET /api/auth/me` - Get current user
 
+#### Users
+- `GET /api/user/search` - Search users
+- `GET /api/user/:username` - Get user profile (includes `isSuperAdmin`)
+- `POST /api/user` - Create new user
+- `PUT /api/user` - Update user profile
 
+#### Posts
+- `GET /api/post` - Get recommended posts feed
+- `GET /api/post/user/:id_user` - Get user's posts
+- `GET /api/post/:id_post` - Get single post (includes `likes`)
+- `POST /api/post` - Create new post
 
+#### Chat
+- `GET /api/chat` - Get user's chats
+- `GET /api/chat/:id_chat/members` - Get chat members
+- `GET /api/chat/:id_chat/messages` - Get chat messages
+- `POST /api/chat` - Create new chat
+- `POST /api/chat/:id_chat/messages` - Send message
 
-## API END POINTS:
+## Authentication
 
-- POST 		/login
-- POST 		/logout
-- GET 		/me
+All protected routes require an `Authorization` header with the authentication token:
 
-<br>
+```
+Authorization: <token>
+```
 
-- GET 		/user
-- GET 		/user/username
-- POST		/user
-- PUT		  /user/username
-- DELETE	/user/username
+## Response Format
 
-<br>
+All responses are in JSON format with database field names as-is (camelCase/snake_case as defined in database schema).
 
-- GET 		/post
-- GET 		/post/:id_post
-- POST		/post
-- PUT		  /post/:id_post
-- DELETE	/post/:id_post
+## Notes
 
-<br>
-
-- GET 		/message
-- GET 		/message/:id_message
-- POST		/message
-- PUT		  /message/:id_message
-- DELETE	/message/:id_message
-
-
-
-# API NON DESCRITTE 
-
-
-GET /message/conversation/:id_partner: 
-
-GET /message/inbox: 
-
-3. Logica del FEED
-GET /post/user/:id_user
-4. Ricerca e Social
-GET /user/search?q=[]
-
-
-
-Header http con user id:
-Authorization 
-
-
-tutto viagga in JSON con i nomi degli attributi ugalui a qulli edl db
+- GET endpoints return full data including `likes` (posts) and `isSuperAdmin` (users)
+- POST endpoints return minimal data (message and ID only)
+- PUT and DELETE endpoints for posts and users are not yet implemented (return 501)
