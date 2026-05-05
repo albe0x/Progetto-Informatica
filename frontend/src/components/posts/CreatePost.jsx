@@ -1,27 +1,29 @@
 import { useState } from 'react';
-import { Image, Link as LinkIcon, X } from 'lucide-react';
+import { Image, Link as LinkIcon, X, Type } from 'lucide-react'; // Aggiunta icona Type
 import { useAuth } from '../../context/AuthContext';
 import api from '../../helpers/api';
 
 const CreatePost = ({ onPostCreated }) => {
   const { user } = useAuth();
+  const [title, setTitle] = useState(''); // Nuovo stato per il titolo
   const [content, setContent] = useState('');
-  const [imageUrl, setImageUrl] = useState(''); // New state for the link
-  const [showLinkInput, setShowLinkInput] = useState(false); // Toggle for the input field
+  const [imageUrl, setImageUrl] = useState(''); 
+  const [showLinkInput, setShowLinkInput] = useState(false); 
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-    if (!content.trim() && !imageUrl.trim()) return;
+    // Controllo che ci sia almeno un titolo o del contenuto
+    if (!title.trim() && !content.trim() && !imageUrl.trim()) return;
     
     setLoading(true);
     try {
-      // Sending both content and the image link to the backend
       await api.post('/post', { 
+        title: title, // Invia il titolo inserito dall'utente
         content: content,
-        imageUrl: imageUrl, // Sending the picture link
-        title: content.substring(0, 25) 
+        imageUrl: imageUrl, 
       });
       
+      setTitle(''); // Reset del titolo
       setContent('');
       setImageUrl('');
       setShowLinkInput(false);
@@ -34,13 +36,23 @@ const CreatePost = ({ onPostCreated }) => {
   };
 
   return (
-    <div className="w-full bg-white dark:bg-black p-5"> {/* Standardized padding */}
+    <div className="w-full bg-white dark:bg-black p-5">
       <div className="flex flex-col w-full">
+        
+        {/* Sezione Inserimento Titolo */}
+        <input 
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Title (optional)"
+          className="w-full bg-transparent text-2xl font-bold border-none focus:ring-0 placeholder-gray-500 mb-2 p-0"
+        />
+
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="What's happening?"
-          className="w-full bg-transparent text-xl border-none focus:ring-0 resize-none placeholder-gray-500 min-h-[140px] p-0"
+          className="w-full bg-transparent text-xl border-none focus:ring-0 resize-none placeholder-gray-500 min-h-[120px] p-0"
         />
 
         {showLinkInput && (
@@ -84,7 +96,7 @@ const CreatePost = ({ onPostCreated }) => {
 
           <button
             onClick={handleSubmit}
-            disabled={(!content.trim() && !imageUrl.trim()) || loading}
+            disabled={(!title.trim() && !content.trim() && !imageUrl.trim()) || loading}
             className="bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white font-bold py-2 px-6 rounded-full text-md shadow-md transition-all active:scale-95"
           >
             {loading ? 'Posting...' : 'Post'}
