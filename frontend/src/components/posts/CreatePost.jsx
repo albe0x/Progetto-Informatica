@@ -1,3 +1,8 @@
+import { useState } from 'react';
+import { Image, Smile, Calendar, MapPin } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import api from '../../helpers/api';
+
 const CreatePost = ({ onPostCreated }) => {
   const { user } = useAuth();
   const [content, setContent] = useState('');
