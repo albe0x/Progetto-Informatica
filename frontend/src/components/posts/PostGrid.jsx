@@ -20,13 +20,13 @@ function PostGrid() {
 
   if (loading) return <p>Caricamento post...</p>;
 
-return (
-    <div className="flex flex-col w-full max-w-2xl mx-auto !gap-y-10 !py-10 !px-4">
-      {posts.map((item) => (
-        <Post key={item.id_post} post={item} />
-      ))}
-    </div>
-  );
+  return (
+      <div className="flex flex-col w-full max-w-2xl mx-auto !gap-y-10 !py-10 !px-4">
+        {posts.map((item) => (
+          <Post key={item.id_post} post={item} />
+        ))}
+      </div>
+    );
 }
 
 export default PostGrid;
