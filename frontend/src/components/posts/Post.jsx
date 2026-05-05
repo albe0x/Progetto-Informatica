@@ -1,6 +1,6 @@
 function Post({ post }) {
   return (
-    <div className="border-b border-gray-100 dark:border-gray-800 p-4 m-2 rounded-md hover:bg-gray-50/50 dark:hover:bg-white/5 transition-all">
+    <div className="border-y-2 border-gray-200 dark:border-gray-800 p-4 m-2 hover:bg-gray-50/50 dark:hover:bg-white/5 transition-all">
       <div className="flex flex-col gap-3">
         {/* Header */}
         <div className="flex justify-between items-baseline">
