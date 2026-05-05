@@ -31,7 +31,7 @@ router.get('/user/:id_user', checkAuth, async (req, res, next) => {
         const sql = ` SELECT posts.*, users.username, posts.likes
                 FROM posts
                 join users on posts.id_user = users.id_user
-                WHERE id_user = $1
+                WHERE posts.id_user = $1
                 `
         const result = await db.query(sql, [req.params.id_user])
         if (result.rowCount === 0) {

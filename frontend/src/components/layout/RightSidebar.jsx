@@ -26,13 +26,13 @@ const RightSidebar = () => {
     <div className="hidden lg:flex flex-col gap-4 p-4 w-80 xl:w-96 sticky top-0 h-screen overflow-y-auto">
       <div className="sticky top-0 bg-white dark:bg-black py-2 z-10">
         <form onSubmit={handleSearch} className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
+          <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
           <input
             type="text"
             placeholder="Search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full bg-gray-100 dark:bg-gray-900 border-none rounded-full py-3 pl-12 pr-4 focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full bg-gray-100 dark:bg-gray-900 border-none rounded-full py-3 pl-14 pr-4 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
           />
         </form>
       </div>
