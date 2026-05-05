@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Send, Hash, Info } from 'lucide-react';
+import { Send, Hash, Info, Plus, Search, X } from 'lucide-react';
 import api from '../../helpers/api';
 import Message from './Message';
 
@@ -9,19 +9,28 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(true);
+  
+  // New Conversation State
+  const [showNewChatModal, setShowNewChatModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  
   const scrollRef = useRef(null);
 
-  // Fetch list of chats
   useEffect(() => {
-    api.get('/chat/')
-      .then(res => {
-        setChats(res.data);
-        setLoading(false);
-      })
-      .catch(err => console.error("Error fetching chats:", err));
+    fetchChats();
   }, []);
 
-  // Fetch messages when activeChat changes
+  const fetchChats = async () => {
+    try {
+      const res = await api.get('/chat/');
+      setChats(res.data);
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching chats:", err);
+    }
+  };
+
   useEffect(() => {
     if (activeChat) {
       api.get(`/chat/${activeChat.id_chat}/messages`)
@@ -30,10 +39,37 @@ const Chat = () => {
     }
   }, [activeChat]);
 
-  // Auto-scroll to bottom on new messages
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // Search for users to start a chat
+  useEffect(() => {
+    if (searchQuery.length > 1) {
+      api.get(`/user/search?q=${searchQuery}`)
+        .then(res => setSearchResults(res.data))
+        .catch(err => console.error("Search error:", err));
+    } else {
+      setSearchResults([]);
+    }
+  }, [searchQuery]);
+
+  const startNewChat = async (targetUser) => {
+    try {
+      const res = await api.post('/chat/', {
+        name: targetUser.username,
+        members: [targetUser.username]
+      });
+      
+      // Refresh chat list and open the new chat
+      await fetchChats();
+      setActiveChat({ id_chat: res.data.id_chat, name: targetUser.username });
+      setShowNewChatModal(false);
+      setSearchQuery('');
+    } catch (err) {
+      console.error("Failed to create chat:", err);
+    }
+  };
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -50,70 +86,60 @@ const Chat = () => {
     }
   };
 
-  if (loading) return <div className="p-4 text-center">Loading conversations...</div>;
+  if (loading) return <div className="p-4 text-center">Loading...</div>;
 
   return (
-    <div className="flex h-screen bg-white dark:bg-black">
-      {/* Left Sidebar: Chat List */}
+    <div className="flex h-screen bg-white dark:bg-black relative">
+      
+      {/* LEFT: Chat List */}
       <div className="w-1/3 border-r border-gray-100 dark:border-gray-800 flex flex-col">
-        <div className="p-4 border-b border-gray-100 dark:border-gray-800">
+        <div className="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center">
           <h2 className="text-xl font-bold">Messages</h2>
+          <button 
+            onClick={() => setShowNewChatModal(true)}
+            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full text-blue-500 transition-colors"
+          >
+            <Plus size={22} />
+          </button>
         </div>
+        
         <div className="overflow-y-auto flex-grow">
           {chats.map(chat => (
             <div 
               key={chat.id_chat}
               onClick={() => setActiveChat(chat)}
               className={`p-4 flex items-center gap-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5 transition-colors ${
-                activeChat?.id_chat === chat.id_chat ? 'border-r-4 border-blue-500 bg-gray-50 dark:bg-white/5' : ''
+                activeChat?.id_chat === chat.id_chat ? 'bg-gray-50 dark:bg-white/5' : ''
               }`}
             >
-              <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-500">
-                <Hash size={24} />
+              <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                {chat.name.charAt(0).toUpperCase()}
               </div>
-              <div className="overflow-hidden">
+              <div className="flex-grow overflow-hidden">
                 <p className="font-bold truncate">{chat.name}</p>
-                <p className="text-xs text-gray-500">Click to view messages</p>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Right Pane: Chat Window */}
+      {/* RIGHT: Active Conversation */}
       <div className="flex-grow flex flex-col">
         {activeChat ? (
           <>
-            {/* Chat Header */}
-            <div className="p-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between sticky top-0 bg-white/80 dark:bg-black/80 backdrop-blur-md z-10">
-              <div className="flex flex-col">
-                <span className="font-bold text-lg">{activeChat.name}</span>
-                <span className="text-xs text-gray-500">Chat ID: {activeChat.id_chat}</span>
-              </div>
-              <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
-                <Info size={20} className="text-blue-500" />
-              </button>
+            <div className="p-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+              <span className="font-bold text-lg">{activeChat.name}</span>
+              <Info size={20} className="text-blue-500" />
             </div>
 
-            {/* Messages Area */}
             <div className="flex-grow overflow-y-auto p-4 flex flex-col">
-              {messages.length > 0 ? (
-                messages.map(msg => (
-                  <Message key={msg.id_message} message={msg} />
-                ))
-              ) : (
-                <div className="text-center text-gray-500 my-auto">
-                  No messages yet. Start the conversation!
-                </div>
-              )}
+              {messages.map(msg => (
+                <Message key={msg.id_message} message={msg} />
+              ))}
               <div ref={scrollRef} />
             </div>
 
-            {/* Input Area */}
-            <form 
-              onSubmit={handleSendMessage}
-              className="p-4 border-t border-gray-100 dark:border-gray-800 flex items-center gap-2"
-            >
+            <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-100 dark:border-gray-800 flex gap-2">
               <input 
                 type="text"
                 value={newMessage}
@@ -121,11 +147,7 @@ const Chat = () => {
                 placeholder="Start a new message"
                 className="flex-grow bg-gray-100 dark:bg-gray-900 border-none rounded-full py-2 px-4 focus:ring-2 focus:ring-blue-500 outline-none"
               />
-              <button 
-                type="submit"
-                disabled={!newMessage.trim()}
-                className="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-full transition-colors disabled:opacity-50"
-              >
+              <button type="submit" className="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-full">
                 <Send size={22} />
               </button>
             </form>
@@ -133,12 +155,64 @@ const Chat = () => {
         ) : (
           <div className="flex flex-col items-center justify-center h-full p-8 text-center">
             <h3 className="text-2xl font-bold mb-2">Select a message</h3>
-            <p className="text-gray-500 max-w-sm">
-              Choose from your existing conversations or start a new one to begin chatting.
-            </p>
+            <button 
+              onClick={() => setShowNewChatModal(true)}
+              className="bg-blue-500 text-white font-bold py-3 px-6 rounded-full mt-4 hover:bg-blue-600 transition-colors"
+            >
+              New Message
+            </button>
           </div>
         )}
       </div>
+
+      {/* MODAL: New Conversation */}
+      {showNewChatModal && (
+        <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-start justify-center pt-[10vh]">
+          <div className="bg-white dark:bg-black w-full max-w-md rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+            <div className="p-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <button onClick={() => setShowNewChatModal(false)} className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
+                  <X size={20} />
+                </button>
+                <span className="font-bold text-lg">New Message</span>
+              </div>
+            </div>
+
+            <div className="p-2 border-b border-gray-100 dark:border-gray-800 flex items-center gap-3">
+              <Search size={18} className="ml-2 text-blue-500" />
+              <input 
+                type="text"
+                autoFocus
+                placeholder="Search people"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-transparent border-none focus:ring-0 py-2"
+              />
+            </div>
+
+            <div className="max-h-[300px] overflow-y-auto">
+              {searchResults.map(user => (
+                <div 
+                  key={user.id_user}
+                  onClick={() => startNewChat(user)}
+                  className="p-4 flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-gray-900 cursor-pointer transition-colors"
+                >
+                  <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                    {user.username.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <p className="font-bold text-sm">{user.displayName || user.username}</p>
+                    <p className="text-gray-500 text-sm">@{user.username}</p>
+                  </div>
+                </div>
+              ))}
+              {searchQuery && searchResults.length === 0 && (
+                <p className="p-8 text-center text-gray-500">No results found for "{searchQuery}"</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
