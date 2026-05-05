@@ -26,24 +26,28 @@ const Sidebar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  return (
-    <div className="flex flex-col h-screen sticky top-0 px-2 xl:px-4 py-2 border-r border-gray-200 dark:border-gray-800 w-fit xl:w-64 overflow-visible">
-      <div className="p-3 mb-2 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors w-fit">
+return (
+    <div className="flex flex-col h-screen sticky top-0 px-2 xl:px-4 py-4 border-r border-gray-200 dark:border-gray-800 w-fit xl:w-64 bg-white dark:bg-black">
+      {/* 1. Top Logo */}
+      <div className="p-3 mb-4 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors w-fit">
         <Feather className="text-blue-500" size={32} />
       </div>
 
-      <nav className="flex flex-col gap-2 flex-grow">
+      {/* 2. Navigation - REMOVED flex-grow to keep buttons from hitting the floor */}
+      <nav className="flex flex-col gap-1">
         <SidebarItem icon={Home} label="Home" path="/" active={location.pathname === '/'} />
         <SidebarItem icon={Search} label="Explore" path="/explore" active={location.pathname === '/explore'} />
         <SidebarItem icon={Bell} label="Notifications" path="/notifications" active={location.pathname === '/notifications'} />
         <SidebarItem icon={Mail} label="Messages" path="/messages" active={location.pathname === '/messages'} />
         <SidebarItem icon={User} label="Profile" path="/profile" active={location.pathname.startsWith('/profile')} />
+        <SidebarItem icon={MoreHorizontal} label="More" path="/more" />
       </nav>
 
-      <div className="relative w-full mt-4" ref={postMenuRef}>
+      {/* 3. Post Section - Use mt-8 instead of mt-auto to keep it higher */}
+      <div className="relative w-full mt-8" ref={postMenuRef}>
         {showPostMenu && (
           <div 
-            className="absolute bottom-full left-0 mb-4 w-[350px] xl:w-[500px] bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl z-[100]"
+            className="absolute bottom-full left-0 mb-4 w-[350px] xl:w-[500px] bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl z-[100] ring-1 ring-black ring-opacity-5"
           >
             <div className="p-2">
               <CreatePost onPostCreated={() => setShowPostMenu(false)} />
@@ -53,21 +57,23 @@ const Sidebar = () => {
 
         <button 
           onClick={() => setShowPostMenu(!showPostMenu)}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 w-full rounded-full transition-all shadow-lg mb-4 hidden xl:block"
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 w-full rounded-full transition-all shadow-lg hidden xl:block"
         >
           Post
         </button>
         
-        {/* Mobile-friendly post button for collapsed sidebar */}
         <button 
           onClick={() => setShowPostMenu(!showPostMenu)}
-          className="bg-blue-500 p-3 text-white rounded-full mb-4 xl:hidden flex justify-center"
+          className="bg-blue-500 p-3 text-white rounded-full xl:hidden flex justify-center w-fit mx-auto"
         >
           <Feather size={24} />
         </button>
       </div>
 
-      <UserButton />
+      {/* 4. User Button - Now pushed to the bottom naturally */}
+      <div className="mt-auto pt-4">
+        <UserButton />
+      </div>
     </div>
   );
 };
