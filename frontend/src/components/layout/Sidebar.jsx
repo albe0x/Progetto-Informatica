@@ -7,21 +7,23 @@ import CreatePost from '../posts/CreatePost';
 const SidebarItem = ({ icon: Icon, label, path, active }) => (
   <Link 
     to={path} 
-    className={`flex items-center gap-4 p-3 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all w-fit ${
-      active ? 'font-bold' : ''
+    className={`flex items-center gap-4 p-3 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all w-fit xl:w-full ${
+      active ? 'font-bold text-blue-500 bg-blue-50/50 dark:bg-blue-900/10' : 'text-gray-700 dark:text-gray-300'
     }`}
   >
-    <Icon size={28} />
+    {/* Simple conditional styling for the icon */}
+    <Icon size={28} className={active ? 'text-blue-500' : ''} />
     <span className="text-xl hidden xl:block">{label}</span>
   </Link>
 );
 
 const Sidebar = () => {
   const location = useLocation();
+  // State to manage the post creation modal visibility
   const [showPostMenu, setShowPostMenu] = useState(false);
   const postMenuRef = useRef(null);
 
-  // Close the popup if clicking outside the white box
+  // useEffect: Standard way to handle side effects like global event listeners
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (postMenuRef.current && !postMenuRef.current.contains(event.target)) {
@@ -31,7 +33,6 @@ const Sidebar = () => {
 
     if (showPostMenu) {
       document.addEventListener("mousedown", handleClickOutside);
-      // Prevent scrolling on the background feed when modal is open
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';

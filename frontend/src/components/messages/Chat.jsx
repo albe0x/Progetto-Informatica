@@ -34,11 +34,27 @@ const Chat = () => {
   };
 
   useEffect(() => {
+    let interval;
+
+    const fetchMessages = async () => {
+      if (!activeChat) return;
+      try {
+        const res = await api.get(`/chat/${activeChat.id_chat}/messages`);
+        setMessages(res.data);
+      } catch (err) {
+        console.error("Error fetching messages:", err);
+      }
+    };
+
     if (activeChat) {
-      api.get(`/chat/${activeChat.id_chat}/messages`)
-        .then(res => setMessages(res.data))
-        .catch(err => console.error("Error fetching messages:", err));
+      fetchMessages();
+      // Polling every 10 seconds
+      interval = setInterval(fetchMessages, 10000);
     }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, [activeChat]);
 
   useEffect(() => {
