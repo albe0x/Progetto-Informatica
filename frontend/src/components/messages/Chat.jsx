@@ -14,6 +14,8 @@ const Chat = () => {
   const [showNewChatModal, setShowNewChatModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [chatName, setChatName] = useState('');
   
   const scrollRef = useRef(null);
 
@@ -47,25 +49,46 @@ const Chat = () => {
   useEffect(() => {
     if (searchQuery.length > 1) {
       api.get(`/user/search?q=${searchQuery}`)
-        .then(res => setSearchResults(res.data))
+        .then(res => {
+          // Filter out already selected users
+          const filtered = res.data.filter(u => !selectedUsers.find(su => su.id_user === u.id_user));
+          setSearchResults(filtered);
+        })
         .catch(err => console.error("Search error:", err));
     } else {
       setSearchResults([]);
     }
-  }, [searchQuery]);
+  }, [searchQuery, selectedUsers]);
 
-  const startNewChat = async (targetUser) => {
+  const toggleUserSelection = (user) => {
+    if (selectedUsers.find(u => u.id_user === user.id_user)) {
+      setSelectedUsers(selectedUsers.filter(u => u.id_user !== user.id_user));
+    } else {
+      setSelectedUsers([...selectedUsers, user]);
+      setSearchQuery('');
+    }
+  };
+
+  const createChat = async () => {
+    if (selectedUsers.length === 0) return;
+    
+    const finalName = chatName.trim() || (selectedUsers.length === 1 
+      ? selectedUsers[0].username 
+      : `Group with ${selectedUsers[0].username} and ${selectedUsers.length - 1} others`);
+
     try {
       const res = await api.post('/chat/', {
-        name: targetUser.username,
-        members: [targetUser.username]
+        name: finalName,
+        members: selectedUsers.map(u => u.username)
       });
       
       // Refresh chat list and open the new chat
       await fetchChats();
-      setActiveChat({ id_chat: res.data.id_chat, name: targetUser.username });
+      setActiveChat({ id_chat: res.data.id_chat, name: finalName });
       setShowNewChatModal(false);
       setSearchQuery('');
+      setSelectedUsers([]);
+      setChatName('');
     } catch (err) {
       console.error("Failed to create chat:", err);
     }
@@ -176,25 +199,51 @@ const Chat = () => {
                 </button>
                 <span className="font-bold text-lg">New Message</span>
               </div>
+              <button 
+                onClick={createChat}
+                disabled={selectedUsers.length === 0}
+                className="bg-blue-500 text-white font-bold py-1.5 px-4 rounded-full disabled:opacity-50 hover:bg-blue-600 transition-colors"
+              >
+                Create
+              </button>
             </div>
 
-            <div className="p-2 border-b border-gray-100 dark:border-gray-800 flex items-center gap-3">
-              <Search size={18} className="ml-2 text-blue-500" />
+            <div className="p-4 border-b border-gray-100 dark:border-gray-800">
               <input 
                 type="text"
-                autoFocus
-                placeholder="Search people"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent border-none focus:ring-0 py-2"
+                placeholder="Chat Name (optional for 1-on-1)"
+                value={chatName}
+                onChange={(e) => setChatName(e.target.value)}
+                className="w-full bg-gray-100 dark:bg-gray-900 border-none rounded-lg py-2 px-4 focus:ring-2 focus:ring-blue-500 outline-none mb-3"
               />
+              
+              <div className="flex flex-wrap gap-2 mb-2">
+                {selectedUsers.map(user => (
+                  <div key={user.id_user} className="flex items-center gap-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 py-1 px-3 rounded-full text-sm font-bold">
+                    @{user.username}
+                    <X size={14} className="cursor-pointer" onClick={() => toggleUserSelection(user)} />
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-3">
+                <Search size={18} className="text-blue-500" />
+                <input 
+                  type="text"
+                  autoFocus
+                  placeholder="Search people"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-transparent border-none focus:ring-0 py-2"
+                />
+              </div>
             </div>
 
             <div className="max-h-[300px] overflow-y-auto">
               {searchResults.map(user => (
                 <div 
                   key={user.id_user}
-                  onClick={() => startNewChat(user)}
+                  onClick={() => toggleUserSelection(user)}
                   className="p-4 flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-gray-900 cursor-pointer transition-colors"
                 >
                   <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">

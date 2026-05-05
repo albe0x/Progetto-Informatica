@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 function Post({ post }) {
   return (
     <div className=" w-full
@@ -35,9 +37,12 @@ function Post({ post }) {
 
         {/* FOOTER */}
         <div className="px-6 py-10">
-          <span className="text-sm font-bold text-blue-500 uppercase tracking-widest">
+          <Link 
+            to={`/profile/${post.username}`}
+            className="text-sm font-bold text-blue-500 uppercase tracking-widest hover:underline"
+          >
             @{post.username}
-          </span>
+          </Link>
         </div>
 
       </div>
