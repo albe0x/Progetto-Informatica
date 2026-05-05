@@ -1,13 +1,8 @@
 function Post({ post }) {
   return (
-    /* Spazio enorme tra i post per pulizia totale */
     <div className="w-full block !mb-32"> 
-      <div className="
-        w-full
-        /* Solo bordo sinistro blu e bordo inferiore per separazione */
-        border-l-[6px] border-l-blue-500 
+      <div className=" w-full
         border-b border-gray-200 dark:border-gray-800 
-        /* Rimosso border-r e border-t per evitare l'effetto doppio bordo */
         bg-white dark:bg-black shadow-sm
       ">
         <div className="flex flex-col w-full">
