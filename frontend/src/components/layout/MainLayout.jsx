@@ -6,15 +6,15 @@ const MainLayout = () => {
   return (
     <div className="flex justify-center min-h-screen bg-white dark:bg-black text-black dark:text-white">
       <div className="flex w-full max-w-7xl">
-        <header className="flex-shrink-0 flex justify-end">
+        <header className="flex-shrink-0 flex justify-end z-20">
           <Sidebar />
         </header>
         
-        <main className="flex-grow border-r border-gray-200 dark:border-gray-800 max-w-[600px] w-full min-h-screen">
+        <main className="flex-grow border-r border-l border-gray-200 dark:border-gray-800 max-w-[600px] w-full min-h-screen">
           <Outlet />
         </main>
 
-        <aside className="flex-shrink-0">
+        <aside className="flex-shrink-0 hidden lg:block">
           <RightSidebar />
         </aside>
       </div>

@@ -16,7 +16,6 @@ const Sidebar = () => {
   const [showPostMenu, setShowPostMenu] = useState(false);
   const postMenuRef = useRef(null);
 
-  // Close the popup if clicking outside the sidebar/menu area
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (postMenuRef.current && !postMenuRef.current.contains(event.target)) {
@@ -28,7 +27,7 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <div className="flex flex-col h-screen sticky top-0 px-2 xl:px-4 py-2 border-r border-gray-200 dark:border-gray-800 w-fit xl:w-64">
+    <div className="flex flex-col h-screen sticky top-0 px-2 xl:px-4 py-2 border-r border-gray-200 dark:border-gray-800 w-fit xl:w-64 overflow-visible">
       <div className="p-3 mb-2 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors w-fit">
         <Feather className="text-blue-500" size={32} />
       </div>
@@ -39,37 +38,36 @@ const Sidebar = () => {
         <SidebarItem icon={Bell} label="Notifications" path="/notifications" active={location.pathname === '/notifications'} />
         <SidebarItem icon={Mail} label="Messages" path="/messages" active={location.pathname === '/messages'} />
         <SidebarItem icon={User} label="Profile" path="/profile" active={location.pathname.startsWith('/profile')} />
-        <SidebarItem icon={MoreHorizontal} label="More" path="/more" />
       </nav>
 
-{/* 1. Ensure the wrapper is relative and has no hidden overflow */}
-<div className="relative w-full mt-auto" ref={postMenuRef}>
-  
-  {/* 2. The Floating Menu */}
-  {showPostMenu && (
-    <div 
-      className="absolute bottom-[calc(100%+10px)] left-0 w-[350px] xl:w-[500px] bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl z-[100] overflow-hidden"
-      style={{ isolation: 'isolate' }}
-    >
-      <div className="p-2">
-        <CreatePost onPostCreated={() => setShowPostMenu(false)} />
+      <div className="relative w-full mt-4" ref={postMenuRef}>
+        {showPostMenu && (
+          <div 
+            className="absolute bottom-full left-0 mb-4 w-[350px] xl:w-[500px] bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl z-[100]"
+          >
+            <div className="p-2">
+              <CreatePost onPostCreated={() => setShowPostMenu(false)} />
+            </div>
+          </div>
+        )}
+
+        <button 
+          onClick={() => setShowPostMenu(!showPostMenu)}
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 w-full rounded-full transition-all shadow-lg mb-4 hidden xl:block"
+        >
+          Post
+        </button>
+        
+        {/* Mobile-friendly post button for collapsed sidebar */}
+        <button 
+          onClick={() => setShowPostMenu(!showPostMenu)}
+          className="bg-blue-500 p-3 text-white rounded-full mb-4 xl:hidden flex justify-center"
+        >
+          <Feather size={24} />
+        </button>
       </div>
-    </div>
-  )}
 
-  {/* 3. The Trigger Button */}
-  <button 
-    onClick={(e) => {
-      e.preventDefault();
-      setShowPostMenu(!showPostMenu);
-    }}
-    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 w-full rounded-full transition-all shadow-lg mb-4"
-  >
-    Post
-  </button>
-</div>
-
-<UserButton />
+      <UserButton />
     </div>
   );
 };
