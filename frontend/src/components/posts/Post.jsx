@@ -1,6 +1,6 @@
 function Post({ post }) {
   return (
-    <div className="w-full block !mb-32"> 
+    <div className="w-full block"> 
       <div className=" w-full
         border-b border-gray-200 dark:border-gray-800 
         bg-white dark:bg-black shadow-sm
@@ -8,8 +8,8 @@ function Post({ post }) {
         <div className="flex flex-col w-full">
           
           {/* SEZIONE TESTO: Padding verticale massiccio */}
-          <div className="px-6 !py-16">
-            <div className="flex justify-between items-center !mb-10">
+          <div className="px-6 py-16">
+            <div className="flex justify-between items-center mb-10">
               <h3 className="text-3xl font-bold text-gray-900 dark:text-white leading-tight">
                 {post.title}
               </h3>
@@ -35,7 +35,7 @@ function Post({ post }) {
           )}
 
           {/* FOOTER */}
-          <div className="px-6 !py-10">
+          <div className="px-6 py-10">
             <span className="text-sm font-bold text-blue-500 uppercase tracking-widest">
               @{post.username}
             </span>
