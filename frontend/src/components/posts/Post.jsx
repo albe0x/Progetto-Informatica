@@ -1,7 +1,6 @@
 function Post({ post }) {
   return (
-    /* Aumentato mb-12 a mb-20 per dare molto più spazio tra i post */
-    <div className="w-full block !mb-40"> 
+    <div className="w-full block !mb-20"> 
       <div className="
         w-full
         border-l-[6px] border-l-blue-500 
@@ -46,6 +45,7 @@ function Post({ post }) {
 
         </div>
       </div>
+      <hr class="h-0.5 border-none bg-gray-400" />
     </div>
   );
 }
