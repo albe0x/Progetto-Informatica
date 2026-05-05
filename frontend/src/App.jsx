@@ -4,15 +4,15 @@ import MainLayout from './components/layout/MainLayout';
 import PostGrid from './components/posts/PostGrid';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
+import Chat from './components/messages/Chat'; 
 
 const Explore = () => <div className="p-4 text-2xl font-bold">Explore Page</div>;
 const Notifications = () => <div className="p-4">Notifications Page</div>;
-const Messages = () => <div className="p-4">Messages Page</div>;
 const Profile = () => <div className="p-4">Profile Page</div>;
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
-  if (loading) return <div className="flex h-screen items-center justify-center">Loading...</div>;
+  if (loading) return <div className="flex h-screen items-center justify-center text-black dark:text-white">Loading...</div>;
   if (!user) return <Navigate to="/login" />;
   return children;
 };
@@ -33,7 +33,8 @@ function App() {
             <Route index element={<PostGrid />} />
             <Route path="explore" element={<Explore />} />
             <Route path="notifications" element={<Notifications />} />
-            <Route path="messages" element={<Messages />} />
+            <Route path="messages" element={<Chat />} />
+            
             <Route path="profile" element={<Profile />} />
             <Route path="profile/:username" element={<Profile />} />
           </Route>
