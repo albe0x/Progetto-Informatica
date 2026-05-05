@@ -1,25 +1,19 @@
 import { useState, useEffect } from 'react';
 import Post from './Post';
+import api from '.../helpers/api';
 
 function PostGrid() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('https://api.albe0x.com/api/post' , {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': '5d9ff32f3157aa75fabb2f945a933b45adaf56f061e4ef0f512fb9e700f67902' //TEST TOCKEN
-        }
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setPosts(data);
+    api.get('/post') 
+      .then((response) => {
+        setPosts(response.data);
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Errore nel fetch:", error);
+        console.error("Errore con Axios:", error);
         setLoading(false);
       });
   }, []);
