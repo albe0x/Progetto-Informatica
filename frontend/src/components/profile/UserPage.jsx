@@ -16,18 +16,27 @@ function UserPage() {
       setLoading(true);
       setError(null);
       try {
-        // If no username in URL, we could fetch 'me', but App.jsx handles /profile and /profile/:username
-        // For simplicity, let's assume username is provided or we fetch 'me' if not.
         let targetUsername = username;
+        let userData = null;
+
         if (!targetUsername) {
+          // Fetch current user if no username in URL
           const meRes = await api.get('/auth/me');
-          targetUsername = meRes.data.username;
+          userData = meRes.data;
+          // After getting me, we still might want to get the full profile via /user/:username 
+          // to stay consistent or just use the data from /me.
+          // API doc says /api/auth/me returns {id_user, username}.
+          // Let's get the full profile.
+          const profileRes = await api.get(`/user/${userData.username}`);
+          userData = profileRes.data;
+        } else {
+          const userRes = await api.get(`/user/${targetUsername}`);
+          userData = userRes.data;
         }
 
-        const userRes = await api.get(`/user/${targetUsername}`);
-        setProfile(userRes.data);
+        setProfile(userData);
 
-        const postsRes = await api.get(`/post/user/${userRes.data.id_user}`);
+        const postsRes = await api.get(`/post/user/${userData.id_user}`);
         setPosts(postsRes.data);
       } catch (err) {
         console.error("Error fetching user data:", err);

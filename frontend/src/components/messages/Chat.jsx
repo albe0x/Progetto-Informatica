@@ -72,9 +72,15 @@ const Chat = () => {
   const createChat = async () => {
     if (selectedUsers.length === 0) return;
     
-    const finalName = chatName.trim() || (selectedUsers.length === 1 
-      ? selectedUsers[0].username 
-      : `Group with ${selectedUsers[0].username} and ${selectedUsers.length - 1} others`);
+    let finalName = chatName.trim();
+    if (!finalName) {
+      if (selectedUsers.length === 1) {
+        finalName = selectedUsers[0].username;
+      } else {
+        const othersCount = selectedUsers.length - 1;
+        finalName = `${selectedUsers[0].username} & ${othersCount} other${othersCount > 1 ? 's' : ''}`;
+      }
+    }
 
     try {
       const res = await api.post('/chat/', {

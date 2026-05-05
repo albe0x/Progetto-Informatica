@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const Message = ({ message }) => {
@@ -6,11 +7,22 @@ const Message = ({ message }) => {
 
   return (
     <div className={`flex flex-col mb-4 ${isMe ? 'items-end' : 'items-start'}`}>
+      {!isMe && (
+        <Link 
+          to={`/profile/${message.username}`}
+          className="text-[10px] font-bold text-gray-500 mb-1 ml-10 hover:underline"
+        >
+          @{message.username}
+        </Link>
+      )}
       <div className="flex items-end gap-2 max-w-[80%]">
         {!isMe && (
-          <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex-shrink-0 flex items-center justify-center text-xs font-bold">
+          <Link 
+            to={`/profile/${message.username}`}
+            className="w-8 h-8 rounded-full bg-blue-500 flex-shrink-0 flex items-center justify-center text-white text-xs font-bold hover:opacity-80 transition-opacity shadow-sm"
+          >
             {message.username?.charAt(0).toUpperCase()}
-          </div>
+          </Link>
         )}
         
         <div 

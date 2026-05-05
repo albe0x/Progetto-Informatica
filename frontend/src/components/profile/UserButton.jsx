@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { LogOut, MoreHorizontal, User, ShieldCheck } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 /**
@@ -56,17 +57,21 @@ const UserButton = () => {
              <ShieldCheck size={18} className="text-blue-500" />
           </div>
 
-          <button className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors text-sm font-bold text-gray-900 dark:text-white">
+          <Link 
+            to="/profile"
+            onClick={() => setIsOpen(false)}
+            className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors text-sm font-bold text-gray-900 dark:text-white"
+          >
             <User size={18} />
-            Add an existing account
-          </button>
+            View Profile
+          </Link>
 
           <button 
             onClick={() => {
               setIsOpen(false);
               logout();
             }}
-            className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors text-sm font-bold text-gray-900 dark:text-white"
+            className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors text-sm font-bold text-gray-900 dark:text-white border-t border-gray-100 dark:border-gray-800"
           >
             <LogOut size={18} />
             Log out @{user.username}
