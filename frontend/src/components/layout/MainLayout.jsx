@@ -10,7 +10,7 @@ const MainLayout = () => {
           <Sidebar />
         </header>
         
-        <main className="flex-grow border-r border-l border-gray-200 dark:border-gray-800 max-w-[600px] w-full min-h-screen">
+        <main className="flex-grow border-r border-l border-gray-200 dark:border-gray-800 max-w-[1000px] w-full min-h-screen">
           <Outlet />
         </main>
 

@@ -58,7 +58,6 @@ const Sidebar = () => {
         <SidebarItem icon={Bell} label="Notifications" path="/notifications" active={location.pathname === '/notifications'} />
         <SidebarItem icon={Mail} label="Messages" path="/messages" active={location.pathname === '/messages'} />
         <SidebarItem icon={User} label="Profile" path="/profile" active={location.pathname.startsWith('/profile')} />
-        <SidebarItem icon={MoreHorizontal} label="More" path="/more" />
       </nav>
 
       {/* 3. Post Trigger Section */}
