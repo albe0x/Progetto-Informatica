@@ -6,6 +6,29 @@ import api from '../../helpers/api';
 const CreatePost = ({ onPostCreated }) => {
   const { user } = useAuth();
   const [content, setContent] = useState('');
+  const [loading, setLoading] = useState(false); // Added loading state for better UX
+
+  // --- THE MISSING FUNCTION ---
+  const handleSubmit = async () => {
+    if (!content.trim()) return;
+    
+    setLoading(true);
+    try {
+      // Adjust the endpoint and data structure to match your backend
+      await api.post('/post', { 
+        content: content,
+        title: content.substring(0, 20) // Backend might require a title
+      });
+      
+      setContent(''); // Clear the textarea
+      if (onPostCreated) onPostCreated(); // Close the popup
+    } catch (err) {
+      console.error("Failed to post:", err);
+      alert("Something went wrong. Try again!");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="w-full bg-white dark:bg-black p-6">
@@ -24,18 +47,21 @@ const CreatePost = ({ onPostCreated }) => {
           />
           
           <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-800 mt-4">
+            {/* Action Icons */}
             <div className="flex gap-4 text-blue-500">
-              <Image size={24} className="cursor-pointer" />
-              <Smile size={24} className="cursor-pointer" />
-              <Calendar size={24} className="cursor-pointer" />
-              <MapPin size={24} className="cursor-pointer" />
+              <Image size={24} className="cursor-pointer hover:opacity-70" />
+              <Smile size={24} className="cursor-pointer hover:opacity-70" />
+              <Calendar size={24} className="cursor-pointer hover:opacity-70" />
+              <MapPin size={24} className="cursor-pointer hover:opacity-70" />
             </div>
 
+            {/* Post Button */}
             <button
               onClick={handleSubmit}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2.5 px-8 rounded-full text-lg shadow-md"
+              disabled={!content.trim() || loading}
+              className="bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white font-bold py-2.5 px-8 rounded-full text-lg shadow-md transition-all active:scale-95"
             >
-              Post
+              {loading ? '...' : 'Post'}
             </button>
           </div>
         </div>
