@@ -20,26 +20,32 @@ function UserPage() {
         let userData = null;
 
         if (!targetUsername) {
-          // Fetch current user if no username in URL
+          // 1. Fetch current user identity
           const meRes = await api.get('/auth/me');
-          userData = meRes.data;
-          // After getting me, we still might want to get the full profile via /user/:username 
-          // to stay consistent or just use the data from /me.
-          // API doc says /api/auth/me returns {id_user, username}.
-          // Let's get the full profile.
-          const profileRes = await api.get(`/user/${userData.username}`);
-          userData = profileRes.data;
-        } else {
-          const userRes = await api.get(`/user/${targetUsername}`);
-          userData = userRes.data;
+          // auth/me returns { id_user, username }
+          targetUsername = meRes.data.username;
         }
 
+        // 2. Fetch full user profile by username
+        const userRes = await api.get(`/user/${targetUsername}`);
+        userData = userRes.data;
         setProfile(userData);
 
-        const postsRes = await api.get(`/post/user/${userData.id_user}`);
-        setPosts(postsRes.data);
+        // 3. Fetch user posts by numeric id_user
+        try {
+          const postsRes = await api.get(`/post/user/${userData.id_user}`);
+          setPosts(postsRes.data);
+        } catch (postErr) {
+          // If 404, it just means no posts, not a user error
+          if (postErr.response?.status === 404) {
+            setPosts([]);
+          } else {
+            console.error("Error fetching posts:", postErr);
+          }
+        }
+
       } catch (err) {
-        console.error("Error fetching user data:", err);
+        console.error("Error fetching user profile:", err);
         setError("User not found or error loading profile.");
       } finally {
         setLoading(false);
