@@ -23,7 +23,7 @@ function PostGrid() {
   return (
     <div 
       className="flex flex-col w-full max-w-2xl mx-auto py-12 px-4"
-      style={{ gap: '100px' }} 
+      style={{ gap: '30px' }} 
     >
       {posts.map((item) => (
         <Post key={item.id_post} post={item} />
