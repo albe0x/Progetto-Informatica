@@ -34,19 +34,17 @@ const CreatePost = ({ onPostCreated }) => {
   };
 
   return (
-    <div className="w-full bg-white dark:bg-black p-6 m-2">
+    <div className="w-full bg-white dark:bg-black p-5"> {/* Standardized padding */}
       <div className="flex flex-col w-full">
-        {/* Main Text Input */}
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="What's happening?"
-          className="w-full bg-transparent text-2xl border-none focus:ring-0 resize-none placeholder-gray-500 min-h-[150px] p-0"
+          className="w-full bg-transparent text-xl border-none focus:ring-0 resize-none placeholder-gray-500 min-h-[140px] p-0"
         />
 
-        {/* --- Dynamic Image Link Input --- */}
         {showLinkInput && (
-          <div className="mt-4 flex items-center gap-2 bg-gray-50 dark:bg-gray-900 p-3 rounded-xl border border-blue-500/30">
+          <div className="mt-2 mb-2 flex items-center gap-2 bg-gray-50 dark:bg-gray-900 p-3 rounded-xl border border-blue-500/30">
             <LinkIcon size={18} className="text-blue-500" />
             <input 
               type="text"
@@ -57,41 +55,37 @@ const CreatePost = ({ onPostCreated }) => {
               autoFocus
             />
             <button onClick={() => {setShowLinkInput(false); setImageUrl('');}}>
-              <X size={18} className="text-gray-500 hover:text-red-500" />
+              <X size={16} className="text-gray-500 hover:text-red-500" />
             </button>
           </div>
         )}
 
-        {/* --- Image Preview --- */}
         {imageUrl && (
-          <div className="relative mt-4 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800">
+          <div className="relative mt-3 mb-3 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm">
             <img 
               src={imageUrl} 
               alt="Preview" 
-              className="w-full max-h-[300px] object-cover"
-              onError={(e) => {
-                e.target.style.display = 'none'; // Hide if link is broken
-              }}
+              className="w-full max-h-[250px] object-cover"
+              onError={(e) => { e.target.style.display = 'none'; }}
             />
           </div>
         )}
         
-        {/* Bottom Toolbar */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-800 mt-4">
-          <div className="flex gap-6 text-blue-500">
-            {/* Click this to show the URL input field */}
+        <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-800">
+          <div className="flex gap-4 text-blue-500">
             <button 
+              type="button"
               onClick={() => setShowLinkInput(!showLinkInput)}
               className={`p-2 rounded-full transition-colors ${showLinkInput ? 'bg-blue-100 dark:bg-blue-900/40' : 'hover:bg-blue-50 dark:hover:bg-blue-900/20'}`}
             >
-              <Image size={24} />
+              <Image size={22} />
             </button>
           </div>
 
           <button
             onClick={handleSubmit}
             disabled={(!content.trim() && !imageUrl.trim()) || loading}
-            className="bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white font-bold py-2.5 px-8 rounded-full text-lg shadow-md transition-all active:scale-95"
+            className="bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white font-bold py-2 px-6 rounded-full text-md shadow-md transition-all active:scale-95"
           >
             {loading ? 'Posting...' : 'Post'}
           </button>

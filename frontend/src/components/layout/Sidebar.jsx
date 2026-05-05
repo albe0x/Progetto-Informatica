@@ -80,30 +80,30 @@ const Sidebar = () => {
         </button>
       </div>
 
-      {/* --- THE FULL SCREEN POPUP MODAL --- */}
-      {showPostMenu && (
-        <div className="fixed inset-0 z-[999] flex items-start justify-center bg-black/50 backdrop-blur-sm pt-[10vh] px-4">
-          
-          {/* Modal Container */}
-          <div 
-            ref={postMenuRef}
-            className="bg-white dark:bg-black w-full max-w-[600px] rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden"
-          >
-            {/* Header with Close Icon */}
-            <div className="flex items-center p-3 border-b border-gray-100 dark:border-gray-800">
+    {showPostMenu && (
+      <div className="fixed inset-0 z-[999] flex items-start justify-center bg-black/50 backdrop-blur-sm pt-[10vh] px-4">
+        <div 
+          ref={postMenuRef}
+          className="bg-white dark:bg-black w-full max-w-[600px] rounded-3xl shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-800"
+        >
+          {/* HEADER WITH TITLE */}
+          <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100 dark:border-gray-800">
+            <div className="flex items-center gap-4">
               <button 
                 onClick={() => setShowPostMenu(false)}
                 className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
               >
-                <X size={22} className="text-black dark:text-white" />
+                <X size={20} />
               </button>
+              <span className="font-bold text-lg">Create New Post</span>
             </div>
-
-            {/* The Actual Creation Form */}
-            <CreatePost onPostCreated={() => setShowPostMenu(false)} />
           </div>
+
+          {/* THE COMPONENT */}
+          <CreatePost onPostCreated={() => setShowPostMenu(false)} />
         </div>
-      )}
+      </div>
+    )}
 
       {/* 4. User Profile Toggle */}
       <div className="mt-auto pt-4">
