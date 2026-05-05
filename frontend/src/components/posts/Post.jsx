@@ -50,3 +50,4 @@ function Post({ post }) {
     </div>
   );
 }
+export default Post;
