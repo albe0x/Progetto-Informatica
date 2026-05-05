@@ -1,4 +1,6 @@
 import { Search } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const TrendItem = ({ category, topic, posts }) => (
   <div className="p-4 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer">
@@ -9,17 +11,30 @@ const TrendItem = ({ category, topic, posts }) => (
 );
 
 const RightSidebar = () => {
+  const [query, setQuery] = useState('');
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (query.trim()) {
+      navigate(`/explore?q=${encodeURIComponent(query.trim())}`);
+      setQuery('');
+    }
+  };
+
   return (
     <div className="hidden lg:flex flex-col gap-4 p-4 w-80 xl:w-96 sticky top-0 h-screen overflow-y-auto">
       <div className="sticky top-0 bg-white dark:bg-black py-2 z-10">
-        <div className="relative">
+        <form onSubmit={handleSearch} className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
           <input
             type="text"
             placeholder="Search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
             className="w-full bg-gray-100 dark:bg-gray-900 border-none rounded-full py-3 pl-12 pr-4 focus:ring-2 focus:ring-blue-500 outline-none"
           />
-        </div>
+        </form>
       </div>
 
       <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800">
