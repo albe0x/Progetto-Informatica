@@ -1,18 +1,20 @@
 function Post({ post }) {
   return (
-    <div className="w-full block !mb-20"> 
+    /* Spazio enorme tra i post per pulizia totale */
+    <div className="w-full block !mb-32"> 
       <div className="
         w-full
+        /* Solo bordo sinistro blu e bordo inferiore per separazione */
         border-l-[6px] border-l-blue-500 
-        border-y border-r border-gray-200 dark:border-gray-800 
-        /* RIMOSSO ROUNDED - Ora i bordi sono netti */
-        bg-white dark:bg-black shadow-lg
+        border-b border-gray-200 dark:border-gray-800 
+        /* Rimosso border-r e border-t per evitare l'effetto doppio bordo */
+        bg-white dark:bg-black shadow-sm
       ">
         <div className="flex flex-col w-full">
           
-          {/* SEZIONE TESTO: !py-16 per molto più spazio sopra e sotto il contenuto */}
+          {/* SEZIONE TESTO: Padding verticale massiccio */}
           <div className="px-6 !py-16">
-            <div className="flex justify-between items-center !mb-12">
+            <div className="flex justify-between items-center !mb-10">
               <h3 className="text-3xl font-bold text-gray-900 dark:text-white leading-tight">
                 {post.title}
               </h3>
@@ -32,20 +34,20 @@ function Post({ post }) {
               <img 
                 src={post.imageUrl} 
                 className="w-full h-auto object-cover max-h-[600px] block"
+                onError={(e) => e.target.style.display = 'none'}
               />
             </div>
           )}
 
-          {/* FOOTER: !py-10 per dare respiro anche alla firma */}
+          {/* FOOTER */}
           <div className="px-6 !py-10">
-            <span className="text-sm font-bold text-blue-500 uppercase tracking-wide">
+            <span className="text-sm font-bold text-blue-500 uppercase tracking-widest">
               @{post.username}
             </span>
           </div>
 
         </div>
       </div>
-      <hr class="h-0.5 border-none bg-gray-400" />
     </div>
   );
 }
