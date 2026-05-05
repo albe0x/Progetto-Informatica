@@ -21,7 +21,10 @@ function PostGrid() {
   if (loading) return <p>Caricamento post...</p>;
 
   return (
-    <div className="flex flex-col gap-y-[120px] w-full max-w-2xl mx-auto py-12 px-4">
+    <div 
+      className="flex flex-col w-full max-w-2xl mx-auto py-12 px-4"
+      style={{ gap: '100px' }} 
+    >
       {posts.map((item) => (
         <Post key={item.id_post} post={item} />
       ))}
