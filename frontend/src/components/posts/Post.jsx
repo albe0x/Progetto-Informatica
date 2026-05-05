@@ -29,7 +29,7 @@ function Post({ post }) {
         {/* Footer info */}
         <div className="pt-2">
           <span className="text-xs font-medium text-blue-500 opacity-80">
-            Posted by ID: {post.id_user}
+            {post.username}
           </span>
         </div>
       </div>
