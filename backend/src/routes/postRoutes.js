@@ -14,6 +14,7 @@ router.get('/', checkAuth, async (req, res, next) => {
                 FROM posts 
                 join users on posts.id_user = users.id_user
                 WHERE id_post = ANY($1::int[])
+                ORDER BY array_position($1::int[], id_post)
                 `
         const postsIds = await recommendationHelpers.getRecommendedPosts(req);
         const result = await db.query(sql, [postsIds])
