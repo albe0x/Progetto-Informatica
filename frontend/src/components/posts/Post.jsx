@@ -7,13 +7,13 @@ function Post({ post }) {
       border-l-[8px] border-l-blue-500 
       /* Bordi orizzontali spessi */
       border-y-[12px] border-r border-gray-200 dark:border-gray-800 
-      rounded-2xl overflow-hidden bg-red-500 dark:bg-black shadow-lg
+      rounded-2xl overflow-hidden bg-white dark:bg-black shadow-lg
       hover:bg-gray-50/50 dark:hover:bg-white/5 transition-all 
     ">
       <div className="flex flex-col w-full">
         
         {/* TESTO: px-10 forza 40px di spazio dai lati */}
-        <div className="px-10 py-8">
+        <div className="px-10 py-8 bg-red-500">
           <div className="flex justify-between items-baseline mb-6">
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white leading-tight">
               {post.title}
