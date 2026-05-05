@@ -42,24 +42,28 @@ const Sidebar = () => {
         <SidebarItem icon={MoreHorizontal} label="More" path="/more" />
       </nav>
 
-<div className="relative mt-4 w-full" ref={postMenuRef}>
-  {/* The Floating Menu */}
+{/* 1. Ensure the wrapper is relative and has no hidden overflow */}
+<div className="relative w-full mt-auto" ref={postMenuRef}>
+  
+  {/* 2. The Floating Menu */}
   {showPostMenu && (
-    <div className="absolute bottom-full left-0 mb-4 w-[350px] xl:w-[500px] bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.2)] z-[70] overflow-hidden">
+    <div 
+      className="absolute bottom-[calc(100%+10px)] left-0 w-[350px] xl:w-[500px] bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl z-[100] overflow-hidden"
+      style={{ isolation: 'isolate' }}
+    >
       <div className="p-2">
-        {/* We pass the close function to the component */}
         <CreatePost onPostCreated={() => setShowPostMenu(false)} />
       </div>
     </div>
   )}
 
-  {/* The Big Blue Post Button */}
+  {/* 3. The Trigger Button */}
   <button 
     onClick={(e) => {
       e.preventDefault();
       setShowPostMenu(!showPostMenu);
     }}
-    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 xl:px-24 rounded-full transition-colors hidden xl:block mb-4 w-full shadow-lg active:scale-95"
+    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 w-full rounded-full transition-all shadow-lg mb-4"
   >
     Post
   </button>
