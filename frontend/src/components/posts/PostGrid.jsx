@@ -21,7 +21,9 @@ function PostGrid() {
   if (loading) return <p>Caricamento post...</p>;
 
   return (
-    <div className="flex flex-col w-full max-w-2xl mx-auto gap-y-16 py-12 px-4">
+    /* gap-[200px] crea una separazione netta di 200 pixel tra ogni post */
+    /* w-full e max-w-2xl mantengono il contenuto centrato e largo */
+    <div className="flex flex-col w-full max-w-2xl mx-auto gap-y-[200px] py-20">
       {posts.map((item) => (
         <Post key={item.id_post} post={item} />
       ))}
