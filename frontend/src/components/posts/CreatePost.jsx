@@ -34,7 +34,7 @@ const CreatePost = ({ onPostCreated }) => {
   };
 
   return (
-    <div className="w-full bg-white dark:bg-black p-6">
+    <div className="w-full bg-white dark:bg-black p-6 m-2">
       <div className="flex flex-col w-full">
         {/* Main Text Input */}
         <textarea
