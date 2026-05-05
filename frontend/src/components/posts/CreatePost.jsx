@@ -38,3 +38,5 @@ const CreatePost = ({ onPostCreated }) => {
     </div>
   );
 };
+
+export default CreatePost;
