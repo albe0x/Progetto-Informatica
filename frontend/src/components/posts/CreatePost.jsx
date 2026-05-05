@@ -27,39 +27,39 @@ const CreatePost = ({ onPostCreated }) => {
   };
 
   return (
-    <div className="w-full bg-white dark:bg-black p-4 border-b border-gray-100 dark:border-gray-800">
-      <div className="flex gap-4">
+    <div className="w-full bg-white dark:bg-black p-6">
+      <div className="flex gap-5">
         
-        {/* Left Side: Avatar Only (Simple) */}
+        {/* Left Side: Big Avatar Only */}
         <div className="flex-shrink-0">
-          <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white text-xl font-bold">
+          <div className="w-14 h-14 rounded-full bg-blue-500 flex items-center justify-center text-white text-2xl font-bold shadow-sm">
             {user?.username?.charAt(0).toUpperCase()}
           </div>
         </div>
 
-        {/* Right Side: Textarea and Buttons */}
+        {/* Right Side: Large Input and Spaced Actions */}
         <div className="flex-grow">
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="What's happening?"
-            className="w-full bg-transparent text-xl border-none focus:ring-0 resize-none placeholder-gray-500 min-h-[120px] p-0"
+            className="w-full bg-transparent text-2xl border-none focus:ring-0 resize-none placeholder-gray-500 min-h-[160px] p-0 pt-2 leading-relaxed"
           />
           
-          <div className="flex items-center justify-between mt-4">
-            {/* Icons Group */}
-            <div className="flex gap-4 text-blue-500">
-              <Image size={22} className="cursor-pointer" />
-              <Smile size={22} className="cursor-pointer" />
-              <Calendar size={22} className="cursor-pointer" />
-              <MapPin size={22} className="cursor-pointer" />
+          <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100 dark:border-gray-900">
+            {/* Larger Icons with more gap */}
+            <div className="flex gap-6 text-blue-500">
+              <Image size={26} className="cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-full transition-all" />
+              <Smile size={26} className="cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-full transition-all" />
+              <Calendar size={26} className="cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-full transition-all" />
+              <MapPin size={26} className="cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-full transition-all" />
             </div>
 
-            {/* Post Button */}
+            {/* Bigger Post Button */}
             <button
               onClick={handleSubmit}
               disabled={!content.trim() || loading}
-              className="bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white font-bold py-2 px-6 rounded-full transition-all"
+              className="bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white font-bold py-2.5 px-8 rounded-full text-lg transition-all shadow-md active:scale-95"
             >
               {loading ? '...' : 'Post'}
             </button>

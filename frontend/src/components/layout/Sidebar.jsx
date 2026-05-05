@@ -47,20 +47,19 @@ return (
       <div className="relative w-full mt-8" ref={postMenuRef}>
         {showPostMenu && (
           <div 
-            className="absolute bottom-full left-0 mb-4 w-[350px] xl:w-[500px] bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl z-[100] ring-1 ring-black ring-opacity-5"
+            className="absolute bottom-full left-0 mb-4 w-[400px] xl:w-[600px] bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] z-[100] overflow-hidden"
           >
-            <div className="p-2">
-              <CreatePost onPostCreated={() => setShowPostMenu(false)} />
-            </div>
+            <CreatePost onPostCreated={() => setShowPostMenu(false)} />
           </div>
         )}
 
         <button 
           onClick={() => setShowPostMenu(!showPostMenu)}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 w-full rounded-full transition-all shadow-lg hidden xl:block"
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 w-full rounded-full text-xl shadow-lg transition-all active:scale-95"
         >
           Post
         </button>
+      </div>
         
         <button 
           onClick={() => setShowPostMenu(!showPostMenu)}
