@@ -29,6 +29,7 @@ function Post({ post }) {
             />
           </div>
         )}
+        {!post.imageUrl && <div className="pb-4" />}
 
         {/* Footer: Riprendiamo il padding per le info utente */}
         <div className="p-8 pt-4">
@@ -36,6 +37,8 @@ function Post({ post }) {
             @{post.username}
           </span>
         </div>
+
+        {!post.imageUrl && <div className="pb-8" />}
       </div>
     </div>
   );
