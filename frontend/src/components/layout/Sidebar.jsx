@@ -1,6 +1,6 @@
 import { Home, Search, Bell, Mail, User, MoreHorizontal, Feather } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import UserButton from '../profile/UserButton';
 import CreatePost from '../posts/CreatePost';
 
