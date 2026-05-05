@@ -26,14 +26,14 @@ const Sidebar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-return (
-    <div className="flex flex-col h-screen sticky top-0 px-2 xl:px-4 py-4 border-r border-gray-200 dark:border-gray-800 w-fit xl:w-64 bg-white dark:bg-black">
+  return (
+    <div className="flex flex-col h-screen sticky top-0 px-2 xl:px-4 py-4 border-r border-gray-200 dark:border-gray-800 w-fit xl:w-64 bg-white dark:bg-black overflow-visible">
       {/* 1. Top Logo */}
       <div className="p-3 mb-4 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors w-fit">
         <Feather className="text-blue-500" size={32} />
       </div>
 
-      {/* 2. Navigation - REMOVED flex-grow to keep buttons from hitting the floor */}
+      {/* 2. Navigation */}
       <nav className="flex flex-col gap-1">
         <SidebarItem icon={Home} label="Home" path="/" active={location.pathname === '/'} />
         <SidebarItem icon={Search} label="Explore" path="/explore" active={location.pathname === '/explore'} />
@@ -43,7 +43,7 @@ return (
         <SidebarItem icon={MoreHorizontal} label="More" path="/more" />
       </nav>
 
-      {/* 3. Post Section - Use mt-8 instead of mt-auto to keep it higher */}
+      {/* 3. Post Section - Fixed syntax and responsive buttons */}
       <div className="relative w-full mt-8" ref={postMenuRef}>
         {showPostMenu && (
           <div 
@@ -53,23 +53,24 @@ return (
           </div>
         )}
 
+        {/* Desktop Button */}
         <button 
           onClick={() => setShowPostMenu(!showPostMenu)}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 w-full rounded-full text-xl shadow-lg transition-all active:scale-95"
+          className="hidden xl:block bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 w-full rounded-full text-xl shadow-lg transition-all active:scale-95"
         >
           Post
         </button>
-      </div>
-        
+
+        {/* Mobile Button (Shows when sidebar is collapsed) */}
         <button 
           onClick={() => setShowPostMenu(!showPostMenu)}
-          className="bg-blue-500 p-3 text-white rounded-full xl:hidden flex justify-center w-fit mx-auto"
+          className="xl:hidden bg-blue-500 p-3 text-white rounded-full flex justify-center w-fit mx-auto shadow-lg active:scale-95"
         >
           <Feather size={24} />
         </button>
       </div>
 
-      {/* 4. User Button - Now pushed to the bottom naturally */}
+      {/* 4. User Button - Pushed to the bottom */}
       <div className="mt-auto pt-4">
         <UserButton />
       </div>
