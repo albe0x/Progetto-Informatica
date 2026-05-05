@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Post from './Post';
-import api from '.../helpers/api';
+import api from '../../helpers/api';
 
 function PostGrid() {
   const [posts, setPosts] = useState([]);
