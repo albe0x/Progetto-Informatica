@@ -21,7 +21,7 @@ function PostGrid() {
   if (loading) return <p>Caricamento post...</p>;
 
   return (
-    <div className="grid-container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
+    <div className="flex flex-col gap-5 w-full">
       {posts.map((item) => (
         <Post key={item.id_post} post={item} />
       ))}
