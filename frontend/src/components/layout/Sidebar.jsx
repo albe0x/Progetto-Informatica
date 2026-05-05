@@ -42,24 +42,30 @@ const Sidebar = () => {
         <SidebarItem icon={MoreHorizontal} label="More" path="/more" />
       </nav>
 
-      <div className="relative" ref={postMenuRef}>
-        {showPostMenu && (
-          <div className="absolute bottom-full left-0 mb-4 w-[300px] xl:w-[500px] bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl z-50 overflow-hidden">
-            <div className="p-2">
-              <CreatePost onPostCreated={() => setShowPostMenu(false)} />
-            </div>
-          </div>
-        )}
-
-        <button 
-          onClick={() => setShowPostMenu(!showPostMenu)}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 xl:px-24 rounded-full mt-4 transition-colors hidden xl:block mb-4 w-full"
-        >
-          Post
-        </button>
+<div className="relative mt-4 w-full" ref={postMenuRef}>
+  {/* The Floating Menu */}
+  {showPostMenu && (
+    <div className="absolute bottom-full left-0 mb-4 w-[350px] xl:w-[500px] bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.2)] z-[70] overflow-hidden">
+      <div className="p-2">
+        {/* We pass the close function to the component */}
+        <CreatePost onPostCreated={() => setShowPostMenu(false)} />
       </div>
+    </div>
+  )}
 
-      <UserButton />
+  {/* The Big Blue Post Button */}
+  <button 
+    onClick={(e) => {
+      e.preventDefault();
+      setShowPostMenu(!showPostMenu);
+    }}
+    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 xl:px-24 rounded-full transition-colors hidden xl:block mb-4 w-full shadow-lg active:scale-95"
+  >
+    Post
+  </button>
+</div>
+
+<UserButton />
     </div>
   );
 };
