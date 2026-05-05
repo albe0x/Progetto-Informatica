@@ -1,5 +1,8 @@
 import { Home, Search, Bell, Mail, User, MoreHorizontal, Feather } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import UserButton from '../profile/UserButton';
+import CreatePost from '../posts/CreatePost';
 
 const SidebarItem = ({ icon: Icon, label, path, active }) => (
   <Link to={path} className={`flex items-center gap-4 p-3 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors w-fit ${active ? 'font-bold' : ''}`}>
@@ -10,6 +13,19 @@ const SidebarItem = ({ icon: Icon, label, path, active }) => (
 
 const Sidebar = () => {
   const location = useLocation();
+  const [showPostMenu, setShowPostMenu] = useState(false);
+  const postMenuRef = useRef(null);
+
+  // Close the popup if clicking outside the sidebar/menu area
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (postMenuRef.current && !postMenuRef.current.contains(event.target)) {
+        setShowPostMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div className="flex flex-col h-screen sticky top-0 px-2 xl:px-4 py-2 border-r border-gray-200 dark:border-gray-800 w-fit xl:w-64">
@@ -26,21 +42,24 @@ const Sidebar = () => {
         <SidebarItem icon={MoreHorizontal} label="More" path="/more" />
       </nav>
 
-      <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 xl:px-24 rounded-full mt-4 transition-colors hidden xl:block">
-        Post
-      </button>
-      <button className="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-full mt-4 transition-colors block xl:hidden">
-        <Feather size={24} />
-      </button>
+      <div className="relative" ref={postMenuRef}>
+        {showPostMenu && (
+          <div className="absolute bottom-full left-0 mb-4 w-[300px] xl:w-[500px] bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl z-50 overflow-hidden">
+            <div className="p-2">
+              <CreatePost onPostCreated={() => setShowPostMenu(false)} />
+            </div>
+          </div>
+        )}
 
-      <div className="mt-auto mb-4 p-3 flex items-center gap-3 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer">
-        <div className="w-10 h-10 rounded-full bg-gray-300"></div>
-        <div className="hidden xl:block flex-grow">
-          <p className="font-bold text-sm">Username</p>
-          <p className="text-gray-500 text-sm">@username</p>
-        </div>
-        <MoreHorizontal className="hidden xl:block" size={20} />
+        <button 
+          onClick={() => setShowPostMenu(!showPostMenu)}
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 xl:px-24 rounded-full mt-4 transition-colors hidden xl:block mb-4 w-full"
+        >
+          Post
+        </button>
       </div>
+
+      <UserButton />
     </div>
   );
 };
