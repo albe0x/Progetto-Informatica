@@ -29,16 +29,16 @@ function Post({ post }) {
             />
           </div>
         )}
-        {!post.imageUrl && <div className="pb-4" />}
 
         {/* Footer: Riprendiamo il padding per le info utente */}
-        <div className="p-8 pt-4">
-          <span className="text-sm font-bold text-blue-500 hover:underline cursor-pointer">
-            @{post.username}
-          </span>
+        <div className="mb-8">
+          <div className="p-8 pt-4">
+            <span className="text-sm font-bold text-blue-500 hover:underline cursor-pointer">
+              @{post.username}
+            </span>
+          </div>
         </div>
 
-        {!post.imageUrl && <div className="pb-8" />}
       </div>
     </div>
   );
