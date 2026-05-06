@@ -1,6 +1,6 @@
 import { Home, Search, Bell, Mail, User, MoreHorizontal, Feather, X, Atom, Sun, Moon } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import UserButton from '../profile/UserButton';
 import CreatePost from '../posts/CreatePost';
 import { useClickOutside } from '../../helpers/useClickOutside';
@@ -13,7 +13,6 @@ const SidebarItem = ({ icon: Icon, label, path, active }) => (
       active ? 'font-bold text-blue-500 bg-blue-50/50 dark:bg-blue-900/10' : 'text-gray-700 dark:text-gray-300'
     }`}
   >
-    {/* Simple conditional styling for the icon */}
     <Icon size={28} className={active ? 'text-blue-500' : ''} />
     <span className="text-xl hidden xl:block">{label}</span>
   </Link>
@@ -25,9 +24,9 @@ const Sidebar = () => {
   const postMenuRef = useRef(null);
   const { theme, toggleTheme } = useTheme();
 
-  const handleOutsideClick = () => {
-    if (showPostMenu) setShowPostMenu(false);
-  };
+  const handleOutsideClick = useCallback(() => {
+    setShowPostMenu(false);
+  }, []);
   
   useClickOutside(postMenuRef, handleOutsideClick);
 

@@ -2,11 +2,11 @@ import { useEffect } from 'react';
 
 /**
  * Hook to handle clicks outside of a referenced element.
- * Useful for closing modals, dropdowns, or menus.
  */
-export const useClickOutside = (ref, handler) => {
+export function useClickOutside(ref, handler) {
   useEffect(() => {
     const listener = (event) => {
+      // Do nothing if clicking ref's element or descendent elements
       if (!ref.current || ref.current.contains(event.target)) {
         return;
       }
@@ -14,8 +14,11 @@ export const useClickOutside = (ref, handler) => {
     };
 
     document.addEventListener("mousedown", listener);
+    document.addEventListener("touchstart", listener);
+    
     return () => {
       document.removeEventListener("mousedown", listener);
+      document.removeEventListener("touchstart", listener);
     };
   }, [ref, handler]);
-};
+}
