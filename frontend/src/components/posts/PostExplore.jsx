@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import Post from './Post';
 import api from '../../helpers/api';
-import { Search, X } from 'lucide-react';
+import { Search, X, CheckCircle, Shield } from 'lucide-react';
 
 function PostExplore() {
   const [posts, setPosts] = useState([]);
@@ -92,9 +92,13 @@ function PostExplore() {
                     {user.username.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex-grow min-w-0">
-                    <p className="font-black text-xl text-gray-900 dark:text-white truncate">
-                      {user.displayName || user.username}
-                    </p>
+                    <div className="flex items-center gap-1">
+                      <p className="font-black text-xl text-gray-900 dark:text-white truncate">
+                        {user.displayName || user.username}
+                      </p>
+                      {user.isVerified && <CheckCircle size={16} className="text-blue-500" />}
+                      {user.isSuperAdmin && <Shield size={16} className="text-amber-500" />}
+                    </div>
                     <p className="text-gray-500 font-medium">@{user.username}</p>
                     {user.bio && (
                       <p className="text-sm mt-2 line-clamp-2 text-gray-700 dark:text-gray-300 leading-relaxed font-medium">

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { LogOut, MoreHorizontal, User, ShieldCheck } from 'lucide-react';
+import { LogOut, MoreHorizontal, User, ShieldCheck, CheckCircle, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
@@ -15,11 +15,15 @@ const UserAvatar = ({ username }) => (
 /**
  * Sub-component for the User Name and Handle
  */
-const UserIdentity = ({ username }) => (
+const UserIdentity = ({ username, isVerified, isSuperAdmin }) => (
   <div className="hidden xl:block flex-grow overflow-hidden text-left">
-    <p className="font-bold text-sm truncate text-gray-900 dark:text-white">
-      {username}
-    </p>
+    <div className="flex items-center gap-1">
+      <p className="font-bold text-sm truncate text-gray-900 dark:text-white">
+        {username}
+      </p>
+      {isVerified && <CheckCircle size={14} className="text-blue-500" />}
+      {isSuperAdmin && <Shield size={14} className="text-amber-500" />}
+    </div>
     <p className="text-gray-500 text-sm truncate">
       @{username?.toLowerCase()}
     </p>
@@ -53,8 +57,7 @@ const UserButton = () => {
           
           <div className="p-4 border-b border-gray-100 dark:border-gray-800 flex items-center gap-3">
              <UserAvatar username={user.username} />
-             <UserIdentity username={user.username} />
-             <ShieldCheck size={18} className="text-blue-500" />
+             <UserIdentity username={user.username} isVerified={user.isVerified} isSuperAdmin={user.isSuperAdmin} />
           </div>
 
           <Link 
@@ -85,7 +88,7 @@ const UserButton = () => {
         className={`flex items-center gap-3 p-3 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all cursor-pointer group ${isOpen ? 'bg-gray-100 dark:bg-gray-800' : ''}`}
       >
         <UserAvatar username={user.username} />
-        <UserIdentity username={user.username} />
+        <UserIdentity username={user.username} isVerified={user.isVerified} isSuperAdmin={user.isSuperAdmin} />
         
         <div className="hidden xl:block ml-auto">
           <MoreHorizontal className="text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white transition-colors" size={20} />
