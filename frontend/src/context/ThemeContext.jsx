@@ -3,9 +3,10 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  // Initialize state based on existing document class, default to 'light'
   const [theme, setTheme] = useState(() => {
-    return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    // Check if user has explicitly set dark mode in a previous session or if document already has it
+    if (document.documentElement.classList.contains('dark')) return 'dark';
+    return 'light';
   });
 
   useEffect(() => {
@@ -16,6 +17,14 @@ export const ThemeProvider = ({ children }) => {
       root.classList.remove('dark');
     }
   }, [theme]);
+
+  // Optional: Sync with system theme preference
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handler = (e) => setTheme(e.matches ? 'dark' : 'light');
+    mediaQuery.addEventListener('change', handler);
+    return () => mediaQuery.removeEventListener('change', handler);
+  }, []);
 
   const toggleTheme = () => {
     setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
