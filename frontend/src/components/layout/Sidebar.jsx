@@ -1,9 +1,10 @@
-import { Home, Search, Bell, Mail, User, MoreHorizontal, Feather, X, Atom } from 'lucide-react';
+import { Home, Search, Bell, Mail, User, MoreHorizontal, Feather, X, Atom, Sun, Moon } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useState, useRef } from 'react';
 import UserButton from '../profile/UserButton';
 import CreatePost from '../posts/CreatePost';
 import { useClickOutside } from '../../helpers/useClickOutside';
+import { useTheme } from '../../context/ThemeContext';
 
 const SidebarItem = ({ icon: Icon, label, path, active }) => (
   <Link 
@@ -22,6 +23,7 @@ const Sidebar = () => {
   const location = useLocation();
   const [showPostMenu, setShowPostMenu] = useState(false);
   const postMenuRef = useRef(null);
+  const { theme, toggleTheme } = useTheme();
 
   useClickOutside(postMenuRef, () => {
     if (showPostMenu) setShowPostMenu(false);
@@ -30,9 +32,17 @@ const Sidebar = () => {
   return (
     <div className="flex flex-col h-screen sticky top-0 px-2 xl:px-4 py-4 border-r border-gray-200 dark:border-gray-800 w-fit xl:w-64 bg-white dark:bg-black overflow-visible z-20">
       
-      {/* 1. Logo */}
-      <div className="p-3 mb-4 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors w-fit">
-        <Atom className="text-blue-500" size={32} />
+      {/* 1. Logo and Theme Toggle */}
+      <div className="flex items-center justify-between p-3 mb-4">
+        <div className="rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors w-fit">
+          <Atom className="text-blue-500" size={32} />
+        </div>
+        <button 
+          onClick={toggleTheme}
+          className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300"
+        >
+          {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+        </button>
       </div>
 
       {/* 2. Navigation Items */}
