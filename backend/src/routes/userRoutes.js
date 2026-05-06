@@ -24,7 +24,7 @@ router.get('/search', checkAuth, async(req, res, next) => {
 router.get('/:username', checkAuth, async (req, res, next) => {
     try {
         const result = await db.query(
-            `SELECT id_user, username, "displayName", bio, "createdAt", "isSuperAdmin" FROM users WHERE LOWER(username) = LOWER($1)`, 
+            `SELECT id_user, username, "displayName", bio, "createdAt", "isSuperAdmin", "isVerified" FROM users WHERE LOWER(username) = LOWER($1)`, 
             [req.params.username]
         );
         if (result.rowCount === 0) {
