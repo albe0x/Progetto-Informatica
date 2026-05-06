@@ -3,13 +3,14 @@ import { useState, useEffect } from 'react';
 import api from '../../helpers/api';
 import { useAuth } from '../../context/AuthContext';
 import { Trash2, Heart, MessageSquare, CheckCircle, Shield } from 'lucide-react';
-
 /**
  * Post Component: Displays a single social media post.
  */
 function Post({ post }) {
+  console.log("Post data:", post);
   const { user: currentUser } = useAuth();
   const [likes, setLikes] = useState(post.likes || 0);
+...
   const [isLiked, setIsLiked] = useState(false);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
