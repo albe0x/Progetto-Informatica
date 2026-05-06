@@ -201,7 +201,7 @@ const Chat = () => {
               </div>
             </div>
 
-            <div className="flex-grow overflow-y-auto p-4 flex flex-col">
+            <div className="flex-grow overflow-y-auto p-4 flex flex-col w-full">
               {messages.map(msg => (
                 <Message key={msg.id_message} message={msg} />
               ))}
