@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import api from '../../helpers/api';
 import { useAuth } from '../../context/AuthContext';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Heart, MessageSquare } from 'lucide-react';
 
 /**
  * Post Component: Displays a single social media post.
@@ -10,6 +10,7 @@ import { Trash2 } from 'lucide-react';
 function Post({ post }) {
   const { user: currentUser } = useAuth();
   const [likes, setLikes] = useState(post.likes || 0);
+  const [isLiked, setIsLiked] = useState(false);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [showComments, setShowComments] = useState(false);
@@ -20,6 +21,13 @@ function Post({ post }) {
   const canDelete = isOwner || (currentUser && currentUser.isSuperAdmin);
 
   useEffect(() => {
+    // Check if current user has already liked this post
+    if (currentUser) {
+        api.get(`/post/${post.id_post}/liked-status`).then(res => setIsLiked(res.data.liked));
+    }
+  }, [currentUser, post.id_post]);
+
+  useEffect(() => {
     if (showComments) {
       api.get(`/post/${post.id_post}/comments`).then(res => setComments(res.data));
     }
@@ -28,6 +36,7 @@ function Post({ post }) {
   const handleLike = async () => {
     try {
       const res = await api.post(`/post/${post.id_post}/like`);
+      setIsLiked(res.data.liked);
       setLikes(prev => res.data.liked ? prev + 1 : prev - 1);
     } catch (err) { console.error(err); }
   };
@@ -88,11 +97,11 @@ function Post({ post }) {
 
         {/* Interaction Bar */}
         <div className="px-6 py-4 flex items-center gap-6 border-t border-gray-50 dark:border-gray-900/50">
-          <button onClick={handleLike} className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-red-500 transition-colors">
-            ❤️ {likes}
+          <button onClick={handleLike} className={`flex items-center gap-2 text-sm font-bold transition-colors ${isLiked ? 'text-red-500' : 'text-gray-500 hover:text-red-500'}`}>
+            <Heart size={18} fill={isLiked ? 'currentColor' : 'none'} /> {likes}
           </button>
           <button onClick={() => setShowComments(!showComments)} className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-blue-500 transition-colors">
-            💬 Commenti
+            <MessageSquare size={18} /> Commenti
           </button>
           <Link to={`/profile/${post.username}`} className="ml-auto text-xs font-black text-blue-500 uppercase tracking-widest">
             @{post.username}

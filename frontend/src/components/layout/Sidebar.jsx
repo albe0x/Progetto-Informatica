@@ -49,7 +49,7 @@ const Sidebar = () => {
       
       {/* 1. Logo */}
       <div className="p-3 mb-4 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors w-fit">
-        <Feather className="text-blue-500" size={32} />
+        <img src="/logo.svg" alt="Logo" className="w-8 h-8" />
       </div>
 
       {/* 2. Navigation Items */}
