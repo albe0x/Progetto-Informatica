@@ -42,6 +42,13 @@ function Post({ post }) {
     } catch (err) { console.error(err); }
   };
 
+  const handleFollow = async () => {
+    try {
+      await api.post(`/user/${post.id_user}/follow`);
+      // Optionally trigger re-fetch or UI update here if needed
+    } catch (err) { console.error("Follow error:", err); }
+  };
+
   const handleComment = async (e) => {
     e.preventDefault();
     if (!newComment.trim()) return;

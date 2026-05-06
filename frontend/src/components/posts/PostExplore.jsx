@@ -26,11 +26,17 @@ function PostExplore() {
   }, []);
 
   useEffect(() => {
-    if (query.trim().length > 1) {
+    if (query.trim().length >= 0) {
       const delayDebounceFn = setTimeout(() => {
         api.get(`/user/search?q=${query}`)
           .then(res => setSearchResults(res.data))
-          .catch(err => console.error("Search error:", err));
+          .catch(err => {
+            if (err.response?.status === 400) {
+                setSearchResults([]);
+            } else {
+                console.error("Search error:", err);
+            }
+          });
       }, 300);
       return () => clearTimeout(delayDebounceFn);
     } else {
@@ -66,7 +72,7 @@ function PostExplore() {
         </div>
       </div>
 
-      {query.length > 1 ? (
+      {query.length > 0 ? (
         /* Results Section: only shown when searching */
         <div className="flex flex-col gap-6 px-2">
           <div className="px-4">
