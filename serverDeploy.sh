@@ -1,15 +1,12 @@
 #!/bin/bash
 set -e
 
-echo "Fetching latest changes from GitHub..."
+echo "--- [STEP 1] Aggiornamento sorgenti ---"
 git fetch origin
 git reset --hard origin/main
 
-echo "Making script executable..."
-chmod +x serverDeploy.sh
+echo "--- [STEP 2] Riavvio container progetto ---"
+docker compose down --remove-orphans
+docker compose up --build -d
 
-echo "Reset and restarting Docker..."
-/usr/local/bin/docker-compose down
-/usr/local/bin/docker-compose up -d --build --force-recreate
-
-echo "Deploy completed successfully!"
+echo "--- DEPLOY COMPLETATO ---"
