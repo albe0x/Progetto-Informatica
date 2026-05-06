@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { Feather } from 'lucide-react';
+import logo from '../../assets/logo.svg';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -24,10 +24,11 @@ const Login = () => {
     <div className="flex h-screen items-center justify-center bg-white dark:bg-black text-black dark:text-white px-4">
       <div className="w-full max-w-md space-y-8">
         <div className="flex justify-center">
-          <Feather className="text-blue-500" size={48} />
+          <img src={logo} alt="Logo" className="w-12 h-12" />
         </div>
         <h2 className="text-3xl font-bold text-center">Sign in to X</h2>
-        {error && <p className="text-red-500 text-center bg-red-100 dark:bg-red-900/20 p-2 rounded">{error}</p>}
+...
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"

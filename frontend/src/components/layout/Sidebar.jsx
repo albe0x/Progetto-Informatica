@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import UserButton from '../profile/UserButton';
 import CreatePost from '../posts/CreatePost';
+import logo from '../../assets/logo.svg';
 
 const SidebarItem = ({ icon: Icon, label, path, active }) => (
   <Link 
@@ -49,7 +50,7 @@ const Sidebar = () => {
       
       {/* 1. Logo */}
       <div className="p-3 mb-4 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors w-fit">
-        <img src="/logo.svg" alt="Logo" className="w-8 h-8" />
+        <img src={logo} alt="Logo" className="w-8 h-8" />
       </div>
 
       {/* 2. Navigation Items */}
