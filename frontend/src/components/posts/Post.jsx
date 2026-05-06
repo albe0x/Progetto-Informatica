@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import api from '../../helpers/api';
 import { useAuth } from '../../context/AuthContext';
-import { Trash2, Heart, MessageSquare } from 'lucide-react';
+import { Trash2, Heart, MessageSquare, CheckCircle, Shield } from 'lucide-react';
 
 /**
  * Post Component: Displays a single social media post.
@@ -103,8 +103,10 @@ function Post({ post }) {
           <button onClick={() => setShowComments(!showComments)} className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-blue-500 transition-colors">
             <MessageSquare size={18} /> Commenti
           </button>
-          <Link to={`/profile/${post.username}`} className="ml-auto text-xs font-black text-blue-500 uppercase tracking-widest">
-            @{post.username} {post.isSuperAdmin ? "ADMIN" : "N"} {post.isVerified? "V": "N"}
+          <Link to={`/profile/${post.username}`} className="ml-auto flex items-center gap-1 text-xs font-black text-blue-500 uppercase tracking-widest">
+            @{post.username}
+            {post.isVerified && <CheckCircle size={14} className="text-blue-500" />}
+            {post.isSuperAdmin && <Shield size={14} className="text-amber-500" />}
           </Link>
         </div>
 
