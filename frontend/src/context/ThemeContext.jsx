@@ -4,35 +4,24 @@ const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
+    // Check local document state.
     return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
   });
 
   useEffect(() => {
+    // Force set the class on the html element
     const root = window.document.documentElement;
-    console.log("Current theme:", theme);
     if (theme === 'dark') {
       root.classList.add('dark');
+      root.style.colorScheme = 'dark';
     } else {
       root.classList.remove('dark');
+      root.style.colorScheme = 'light';
     }
   }, [theme]);
 
-  // Sync with system theme preference
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handler = (e) => {
-        setTheme(e.matches ? 'dark' : 'light');
-    };
-    mediaQuery.addEventListener('change', handler);
-    return () => mediaQuery.removeEventListener('change', handler);
-  }, []);
-
   const toggleTheme = () => {
-    setTheme(prev => {
-        const next = prev === 'light' ? 'dark' : 'light';
-        console.log("Toggling theme to:", next);
-        return next;
-    });
+    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
   };
 
   return (
