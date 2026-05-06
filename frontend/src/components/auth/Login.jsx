@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import logo from '../../assets/logo.svg';
+import { Atom } from 'lucide-react';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -24,7 +24,7 @@ const Login = () => {
     <div className="flex h-screen items-center justify-center bg-white dark:bg-black text-black dark:text-white px-4">
       <div className="w-full max-w-md space-y-8">
         <div className="flex justify-center">
-          <img src={logo} alt="Logo" className="w-12 h-12" />
+          <Atom className="text-blue-500" size={48} />
         </div>
         <h2 className="text-3xl font-bold text-center">Sign in to X</h2>
 ...
