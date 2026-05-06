@@ -6,7 +6,8 @@ CREATE TABLE users (
     "passwordHash" VARCHAR(255) NOT NULL,
     "authorizationToken" VARCHAR(255),
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    "isSuperAdmin" BOOLEAN DEFAULT false
+    "isSuperAdmin" BOOLEAN DEFAULT false,
+    "isVerified" BOOLEAN DEFAULT false
 );
 
 CREATE UNIQUE INDEX idx_users_username_lower ON users (LOWER(username));
