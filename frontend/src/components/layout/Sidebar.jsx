@@ -1,9 +1,8 @@
 import { Home, Search, Bell, Mail, User, MoreHorizontal, Feather, X, Atom, Sun, Moon } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import UserButton from '../profile/UserButton';
 import CreatePost from '../posts/CreatePost';
-import { useClickOutside } from '../../helpers/useClickOutside';
 import { useTheme } from '../../context/ThemeContext';
 
 const SidebarItem = ({ icon: Icon, label, path, active }) => (
@@ -24,11 +23,19 @@ const Sidebar = () => {
   const postMenuRef = useRef(null);
   const { theme, toggleTheme } = useTheme();
 
-  const handleOutsideClick = useCallback(() => {
-    setShowPostMenu(false);
-  }, []);
-  
-  useClickOutside(postMenuRef, handleOutsideClick);
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (postMenuRef.current && !postMenuRef.current.contains(event.target)) {
+        setShowPostMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("touchstart", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("touchstart", handleOutsideClick);
+    };
+  }, [showPostMenu]);
 
   return (
     <div className="flex flex-col h-screen sticky top-0 px-2 xl:px-4 py-4 border-r border-gray-200 dark:border-gray-800 w-fit xl:w-64 bg-white dark:bg-black overflow-visible z-20">
