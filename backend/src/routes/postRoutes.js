@@ -49,7 +49,7 @@ router.get('/user/:id_user', checkAuth, async (req, res, next) => {
 // GET /api/post/:id_post (Dettaglio singolo post)
 router.get('/:id_post', checkAuth, async (req, res, next) => {
     try {
-        const sql = ` SELECT posts.*, users.username, posts.likes
+        const sql = ` SELECT posts.*, users.username, users."isSuperAdmin", users."isVerified", posts.likes
                 FROM posts
                 join users on posts.id_user = users.id_user
                 WHERE id_post = $1
