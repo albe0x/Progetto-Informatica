@@ -25,9 +25,11 @@ const Sidebar = () => {
   const postMenuRef = useRef(null);
   const { theme, toggleTheme } = useTheme();
 
-  useClickOutside(postMenuRef, () => {
+  const handleOutsideClick = () => {
     if (showPostMenu) setShowPostMenu(false);
-  });
+  };
+  
+  useClickOutside(postMenuRef, handleOutsideClick);
 
   return (
     <div className="flex flex-col h-screen sticky top-0 px-2 xl:px-4 py-4 border-r border-gray-200 dark:border-gray-800 w-fit xl:w-64 bg-white dark:bg-black overflow-visible z-20">
