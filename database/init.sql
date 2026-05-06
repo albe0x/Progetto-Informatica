@@ -1,6 +1,6 @@
 CREATE TABLE users (
     id_user SERIAL PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
+    username VARCHAR(50) NOT NULL,
     "displayName" VARCHAR(100),
     bio TEXT,
     "passwordHash" VARCHAR(255) NOT NULL,
@@ -8,6 +8,8 @@ CREATE TABLE users (
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "isSuperAdmin" BOOLEAN DEFAULT false
 );
+
+CREATE UNIQUE INDEX idx_users_username_lower ON users (LOWER(username));
 
 CREATE TABLE posts (
     id_post SERIAL PRIMARY KEY,

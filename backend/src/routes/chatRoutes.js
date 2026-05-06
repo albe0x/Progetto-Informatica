@@ -99,9 +99,10 @@ router.post('/', checkAuth, async (req, res, next) => {
                 INSERT INTO chatmembers (id_chat, id_user)
                 SELECT $1, id_user 
                 FROM users 
-                WHERE username = ANY($2)
+                WHERE LOWER(username) = ANY($2)
             `;
-            await db.query(memberSql, [newChatId, members]);
+            const lowerMembers = members.map(m => m.toLowerCase());
+            await db.query(memberSql, [newChatId, lowerMembers]);
         }
 
         return res.status(201).json({ 

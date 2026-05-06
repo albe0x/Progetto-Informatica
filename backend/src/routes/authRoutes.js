@@ -17,9 +17,9 @@ router.post('/login', async (req, res, next) => {
 
     try {
     const sql = `
-            SELECT id_user, "passwordHash"
+            SELECT id_user, "passwordHash", username
             FROM users
-            WHERE username = $1
+            WHERE LOWER(username) = LOWER($1)
         `;
     const result = await db.query(sql, [username]);
     const user = result.rows[0];
@@ -38,7 +38,7 @@ router.post('/login', async (req, res, next) => {
         return res.json({ 
             message: "Login effettuato", 
             token: token,
-            username: username 
+            username: user.username 
         });
     } else {
         return next(createError(401, "Credenziali non valide"));
