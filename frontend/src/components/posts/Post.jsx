@@ -104,7 +104,7 @@ function Post({ post }) {
             <MessageSquare size={18} /> Commenti
           </button>
           <Link to={`/profile/${post.username}`} className="ml-auto text-xs font-black text-blue-500 uppercase tracking-widest">
-            @{post.username} {post.isSuperAdmin ? "ADMIN" : ""} {post.isVerified? "V": ""}
+            @{post.username} {post.isSuperAdmin ? "ADMIN" : "N"} {post.isVerified? "V": "N"}
           </Link>
         </div>
 
