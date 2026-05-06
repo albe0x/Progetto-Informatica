@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 const Message = ({ message }) => {
   const { user } = useAuth();
   const isMe = message.username === user?.username;
+  console.log("Message Debug:", { messageUsername: message.username, currentUser: user?.username, isMe });
 
   return (
     <div className={`flex flex-col mb-4 ${isMe ? 'items-end' : 'items-start'}`}>

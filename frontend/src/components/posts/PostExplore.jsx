@@ -81,7 +81,7 @@ function PostExplore() {
           </div>
           
           {searchResults.length > 0 ? (
-            <div className="flex flex-col divide-y divide-gray-100 dark:divide-gray-800 border-y border-gray-100 dark:border-gray-800">
+            <div className="flex flex-col divide-y divide-gray-100 dark:divide-gray-800">
               {searchResults.map(user => (
                 <Link 
                   key={user.id_user}

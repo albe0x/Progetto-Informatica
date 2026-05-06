@@ -56,7 +56,6 @@ const Sidebar = () => {
       <nav className="flex flex-col gap-1">
         <SidebarItem icon={Home} label="Home" path="/" active={location.pathname === '/'} />
         <SidebarItem icon={Search} label="Explore" path="/explore" active={location.pathname === '/explore'} />
-        <SidebarItem icon={Bell} label="Notifications" path="/notifications" active={location.pathname === '/notifications'} />
         <SidebarItem icon={Mail} label="Messages" path="/messages" active={location.pathname === '/messages'} />
         <SidebarItem icon={User} label="Profile" path="/profile" active={location.pathname.startsWith('/profile')} />
       </nav>
