@@ -80,7 +80,7 @@ const Sidebar = () => {
       </div>
 
     {showPostMenu && (
-      <div className="fixed inset-0 z-[999] flex items-start justify-center bg-black/50 backdrop-blur-sm pt-[10vh] px-4">
+      <div className="fixed inset-0 z-999 flex items-start justify-center bg-black/50 backdrop-blur-sm pt-[10vh] px-4">
         <div 
           ref={postMenuRef}
           className="bg-white dark:bg-black w-full max-w-[600px] rounded-3xl shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-800"

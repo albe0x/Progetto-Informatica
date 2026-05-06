@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { Feather } from 'lucide-react';
+import { Atom } from 'lucide-react';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -11,7 +11,7 @@ const Register = () => {
     bio: ''
   });
   const [error, setError] = useState('');
-  const { register } = useAuth();
+  const { register, login } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -22,7 +22,9 @@ const Register = () => {
     e.preventDefault();
     try {
       await register(formData);
-      navigate('/login');
+      // Auto-login after successful registration
+      await login(formData.username, formData.password);
+      navigate('/');
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to register');
     }
@@ -32,7 +34,7 @@ const Register = () => {
     <div className="flex h-screen items-center justify-center bg-white dark:bg-black text-black dark:text-white px-4">
       <div className="w-full max-w-md space-y-6">
         <div className="flex justify-center">
-          <Feather className="text-blue-500" size={48} />
+          <Atom className="text-blue-500" size={48} />
         </div>
         <h2 className="text-3xl font-bold text-center">Create your account</h2>
         {error && <p className="text-red-500 text-center bg-red-100 dark:bg-red-900/20 p-2 rounded">{error}</p>}

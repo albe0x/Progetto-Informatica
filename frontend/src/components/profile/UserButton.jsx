@@ -16,7 +16,7 @@ const UserAvatar = ({ username }) => (
  * Sub-component for the User Name and Handle
  */
 const UserIdentity = ({ username, isVerified, isSuperAdmin }) => (
-  <div className="hidden xl:block flex-grow overflow-hidden text-left">
+  <div className="hidden xl:block grow overflow-hidden text-left">
     <div className="flex items-center gap-1">
       <p className="font-bold text-sm truncate text-gray-900 dark:text-white">
         {username}
