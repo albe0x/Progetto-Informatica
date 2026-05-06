@@ -10,7 +10,7 @@ const checkAuth = async (req, res, next) => {
 
     try{
         const sql = `
-            SELECT id_user, username
+            SELECT id_user, username, "isSuperAdmin"
             FROM users
             WHERE "authorizationToken" = $1
         ;`
@@ -24,7 +24,8 @@ const checkAuth = async (req, res, next) => {
 
         req.user = { 
             id_user: user.id_user,
-            username: user.username 
+            username: user.username,
+            isSuperAdmin: user.isSuperAdmin
         };
         next();
 

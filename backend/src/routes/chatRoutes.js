@@ -115,6 +115,29 @@ router.post('/', checkAuth, async (req, res, next) => {
     }
 });
 
+router.post('/:id_chat/members', checkAuth, async (req, res, next) => {
+    const { id_chat } = req.params;
+    const { members = [] } = req.body;
+
+    try {
+        if (members.length > 0) {
+            const memberSql = `
+                INSERT INTO chatmembers (id_chat, id_user)
+                SELECT $1, id_user 
+                FROM users 
+                WHERE LOWER(username) = ANY($2)
+                ON CONFLICT DO NOTHING
+            `;
+            const lowerMembers = members.map(m => m.toLowerCase());
+            await db.query(memberSql, [id_chat, lowerMembers]);
+        }
+
+        return res.status(200).json({ message: "Members added successfully" });
+    } catch(err) {
+        return next(err);
+    }
+});
+
 router.post('/:id_chat/messages', checkAuth, async (req, res, next) => {
     const { id_chat } = req.params;
     const { content } = req.body;

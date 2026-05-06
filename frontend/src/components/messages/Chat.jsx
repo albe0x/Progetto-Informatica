@@ -12,11 +12,12 @@ const Chat = () => {
   
   // New Conversation State
   const [showNewChatModal, setShowNewChatModal] = useState(false);
+  const [showAddMemberModal, setShowAddMemberModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [chatName, setChatName] = useState('');
-  
+
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -61,12 +62,11 @@ const Chat = () => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Search for users to start a chat
+  // Search for users
   useEffect(() => {
     if (searchQuery.length > 1) {
       api.get(`/user/search?q=${searchQuery}`)
         .then(res => {
-          // Filter out already selected users
           const filtered = res.data.filter(u => !selectedUsers.find(su => su.id_user === u.id_user));
           setSearchResults(filtered);
         })
@@ -104,16 +104,32 @@ const Chat = () => {
         members: selectedUsers.map(u => u.username)
       });
       
-      // Refresh chat list and open the new chat
       await fetchChats();
       setActiveChat({ id_chat: res.data.id_chat, name: finalName });
       setShowNewChatModal(false);
-      setSearchQuery('');
-      setSelectedUsers([]);
-      setChatName('');
+      resetSearch();
     } catch (err) {
       console.error("Failed to create chat:", err);
     }
+  };
+
+  const addMembers = async () => {
+    if (selectedUsers.length === 0 || !activeChat) return;
+    try {
+      await api.post(`/chat/${activeChat.id_chat}/members`, {
+        members: selectedUsers.map(u => u.username)
+      });
+      setShowAddMemberModal(false);
+      resetSearch();
+    } catch (err) {
+      console.error("Failed to add members:", err);
+    }
+  };
+
+  const resetSearch = () => {
+    setSearchQuery('');
+    setSelectedUsers([]);
+    setChatName('');
   };
 
   const handleSendMessage = async (e) => {
@@ -174,7 +190,15 @@ const Chat = () => {
           <>
             <div className="p-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
               <span className="font-bold text-lg">{activeChat.name}</span>
-              <Info size={20} className="text-blue-500" />
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => setShowAddMemberModal(true)}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full text-blue-500 transition-colors"
+                >
+                  <Plus size={20} />
+                </button>
+                <Info size={20} className="text-blue-500 cursor-pointer" />
+              </div>
             </div>
 
             <div className="flex-grow overflow-y-auto p-4 flex flex-col">
@@ -210,34 +234,36 @@ const Chat = () => {
         )}
       </div>
 
-      {/* MODAL: New Conversation */}
-      {showNewChatModal && (
+      {/* MODAL: New Conversation / Add Member */}
+      {(showNewChatModal || showAddMemberModal) && (
         <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-start justify-center pt-[10vh]">
           <div className="bg-white dark:bg-black w-full max-w-md rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
             <div className="p-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <button onClick={() => setShowNewChatModal(false)} className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
+                <button onClick={() => { setShowNewChatModal(false); setShowAddMemberModal(false); resetSearch(); }} className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
                   <X size={20} />
                 </button>
-                <span className="font-bold text-lg">New Message</span>
+                <span className="font-bold text-lg">{showNewChatModal ? 'New Message' : 'Add Members'}</span>
               </div>
               <button 
-                onClick={createChat}
+                onClick={showNewChatModal ? createChat : addMembers}
                 disabled={selectedUsers.length === 0}
                 className="bg-blue-500 text-white font-bold py-1.5 px-4 rounded-full disabled:opacity-50 hover:bg-blue-600 transition-colors"
               >
-                Create
+                {showNewChatModal ? 'Create' : 'Add'}
               </button>
             </div>
 
             <div className="p-4 border-b border-gray-100 dark:border-gray-800">
-              <input 
-                type="text"
-                placeholder="Chat Name (optional for 1-on-1)"
-                value={chatName}
-                onChange={(e) => setChatName(e.target.value)}
-                className="w-full bg-gray-100 dark:bg-gray-900 border-none rounded-lg py-2 px-4 focus:ring-2 focus:ring-blue-500 outline-none mb-3"
-              />
+              {showNewChatModal && (
+                <input 
+                  type="text"
+                  placeholder="Chat Name (optional for 1-on-1)"
+                  value={chatName}
+                  onChange={(e) => setChatName(e.target.value)}
+                  className="w-full bg-gray-100 dark:bg-gray-900 border-none rounded-lg py-2 px-4 focus:ring-2 focus:ring-blue-500 outline-none mb-3"
+                />
+              )}
               
               <div className="flex flex-wrap gap-2 mb-2">
                 {selectedUsers.map(user => (

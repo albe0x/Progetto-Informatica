@@ -88,8 +88,73 @@ router.put('/', checkAuth, async (req, res, next) => {
     }
 })
 
+// POST /api/user/:id_user/follow (Toggle Follow)
+router.post('/:id_user/follow', checkAuth, async (req, res, next) => {
+    try {
+        const follower_id = req.user.id_user;
+        const followed_id = req.params.id_user;
+        if (follower_id == followed_id) return next(createError(400, "Non puoi seguire te stesso"));
+
+        const checkFollow = await db.query('SELECT 1 FROM follows WHERE follower_id = $1 AND followed_id = $2', [follower_id, followed_id]);
+        
+        if (checkFollow.rowCount > 0) {
+            await db.query('DELETE FROM follows WHERE follower_id = $1 AND followed_id = $2', [follower_id, followed_id]);
+            return res.json({ followed: false });
+        } else {
+            await db.query('INSERT INTO follows (follower_id, followed_id) VALUES ($1, $2)', [follower_id, followed_id]);
+            return res.json({ followed: true });
+        }
+    } catch(err) { return next(err); }
+});
+
+// GET /api/user/:id_user/following-status (Verifica se segui l'utente)
+router.get('/:id_user/following-status', checkAuth, async (req, res, next) => {
+    try {
+        const checkFollow = await db.query('SELECT 1 FROM follows WHERE follower_id = $1 AND followed_id = $2', [req.user.id_user, req.params.id_user]);
+        return res.json({ followed: checkFollow.rowCount > 0 });
+    } catch(err) { return next(err); }
+});
+
+// GET /api/user/export (Export dei dati dell'utente)
+router.get('/export/me', checkAuth, async (req, res, next) => {
+    try {
+        const id_user = req.user.id_user;
+        const profile = await db.query('SELECT * FROM users WHERE id_user = $1', [id_user]);
+        const posts = await db.query('SELECT * FROM posts WHERE id_user = $1', [id_user]);
+        const comments = await db.query('SELECT * FROM post_comments WHERE id_user = $1', [id_user]);
+        
+        const exportData = {
+            profile: profile.rows[0],
+            posts: posts.rows,
+            comments: comments.rows,
+            exportedAt: new Date().toISOString(),
+            notice: "Questi sono tutti i dati che il sistema ha memorizzato su di te."
+        };
+        
+        res.setHeader('Content-disposition', 'attachment; filename=my_data.json');
+        res.setHeader('Content-type', 'application/json');
+        return res.json(exportData);
+    } catch(err) { return next(err); }
+});
+
 // solo utente stesso
-// DELETE /api/user/:username (Cancellazione utente)
-router.delete('/:username', checkAuth, (req, res, next) => next(createError(501, "DELETE NON IMPLEMENTATA")));
+// DELETE /api/user/ (Cancellazione account)
+router.delete('/', checkAuth, async (req, res, next) => {
+    try {
+        await db.query('DELETE FROM users WHERE id_user = $1', [req.user.id_user]);
+        return res.json({ message: "Account eliminato correttamente" });
+    } catch(err) { return next(err); }
+});
+
+// DELETE /api/user/:username (Mantenuto per compatibilità, punta al nuovo)
+router.delete('/:username', checkAuth, async (req, res, next) => {
+    if (req.user.username !== req.params.username && !req.user.isSuperAdmin) {
+        return next(createError(403, "Non puoi eliminare questo account"));
+    }
+    try {
+        await db.query('DELETE FROM users WHERE username = $1', [req.params.username]);
+        return res.json({ message: "Account eliminato" });
+    } catch(err) { return next(err); }
+});
 
 module.exports = router;

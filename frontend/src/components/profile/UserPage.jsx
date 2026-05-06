@@ -1,18 +1,20 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../helpers/api';
 import Post from '../posts/Post';
-import { Calendar, X, Camera } from 'lucide-react';
+import { Calendar, X, Camera, Download, Trash2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 function UserPage() {
   const { username } = useParams();
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, logout } = useAuth();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [posts, setPosts] = useState([]);
+  const [isFollowing, setIsFollowing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   // Edit Profile State
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editData, setEditData] = useState({ displayName: '', bio: '' });
@@ -37,6 +39,11 @@ function UserPage() {
       const userData = userRes.data;
       setProfile(userData);
       
+      // Check following status
+      if (currentUser && currentUser.username !== userData.username) {
+        api.get(`/user/${userData.id_user}/following-status`).then(res => setIsFollowing(res.data.followed));
+      }
+
       // Pre-fill edit form with existing data
       setEditData({ 
         displayName: userData.displayName || '', 
@@ -60,6 +67,29 @@ function UserPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleExportData = async () => {
+    try {
+      const res = await api.get('/user/export/me');
+      const blob = new Blob([JSON.stringify(res.data, null, 2)], { type: 'application/json' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'i_miei_dati.json');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) { console.error("Export failed:", err); }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!window.confirm("Sei sicuro di voler eliminare DEFINITIVAMENTE il tuo account? Questa azione non è reversibile.")) return;
+    try {
+      await api.delete('/user/');
+      logout();
+      navigate('/login');
+    } catch (err) { console.error("Deletion failed:", err); }
   };
 
   // Trigger data fetch whenever the username in the URL changes
@@ -104,12 +134,23 @@ function UserPage() {
           <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white dark:border-black bg-blue-500 shadow-xl flex items-center justify-center text-white text-4xl font-black">
             {profile.username.charAt(0).toUpperCase()}
           </div>
-          {isOwnProfile && (
+          {isOwnProfile ? (
             <button 
               onClick={() => setIsEditModalOpen(true)}
               className="bg-transparent border-2 border-gray-200 dark:border-gray-800 font-black py-2.5 px-6 rounded-full hover:bg-gray-50 dark:hover:bg-gray-900 transition-all active:scale-95 text-sm"
             >
               Edit Profile
+            </button>
+          ) : (
+            <button 
+              onClick={handleFollow}
+              className={`font-black py-2.5 px-8 rounded-full transition-all active:scale-95 text-sm ${
+                isFollowing 
+                  ? 'bg-transparent border-2 border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white hover:border-red-500 hover:text-red-500 hover:bg-red-50/10' 
+                  : 'bg-blue-500 text-white hover:bg-blue-600 shadow-md'
+              }`}
+            >
+              {isFollowing ? 'Unfollow' : 'Follow'}
             </button>
           )}
         </div>
@@ -123,6 +164,17 @@ function UserPage() {
           <p className="text-base md:text-lg mb-6 whitespace-pre-wrap leading-relaxed text-gray-800 dark:text-gray-200">
             {profile.bio}
           </p>
+        )}
+
+        {isOwnProfile && (
+          <div className="flex gap-4 mb-6">
+            <button onClick={handleExportData} className="flex items-center gap-2 text-xs font-bold text-gray-500 hover:text-blue-500">
+              <Download size={16} /> Esporta i miei dati
+            </button>
+            <button onClick={handleDeleteAccount} className="flex items-center gap-2 text-xs font-bold text-gray-500 hover:text-red-500">
+              <Trash2 size={16} /> Elimina account
+            </button>
+          </div>
         )}
 
         <div className="flex flex-wrap gap-6 text-gray-500 text-sm font-medium">
