@@ -26,7 +26,7 @@ const Login = () => {
         <div className="flex justify-center">
           <Atom className="text-blue-500" size={48} />
         </div>
-        <h2 className="text-3xl font-bold text-center">Sign in to X</h2>
+        <h2 className="text-3xl font-bold text-center">Sign in</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
