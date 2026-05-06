@@ -96,17 +96,17 @@ function UserPage() {
   useEffect(() => {
     fetchUserData();
   }, [username]);
-const handleFollow = async () => {
-  try {
-    const res = await api.post(`/user/${profile.id_user}/follow`);
-    setIsFollowing(res.data.followed);
-  } catch (err) { console.error("Follow error:", err); }
-};
 
-const handleUpdateProfile = async (e) => {
-  e.preventDefault();
-  setIsSaving(true);
-...
+  const handleFollow = async () => {
+    try {
+      const res = await api.post(`/user/${profile.id_user}/follow`);
+      setIsFollowing(res.data.followed);
+    } catch (err) { console.error("Follow error:", err); }
+  };
+
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault();
+    setIsSaving(true);
     try {
       await api.put('/user/', editData);
       setIsEditModalOpen(false);
@@ -271,4 +271,3 @@ const handleUpdateProfile = async (e) => {
 }
 
 export default UserPage;
-
