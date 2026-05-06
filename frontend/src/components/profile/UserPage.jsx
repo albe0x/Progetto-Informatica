@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../helpers/api';
 import Post from '../posts/Post';
-import { Calendar, X, Camera, Download, Trash2 } from 'lucide-react';
+import { Calendar, X, Camera, Download, Trash2, CheckCircle, Shield } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 function UserPage() {
@@ -156,7 +156,11 @@ function UserPage() {
         </div>
 
         <div className="space-y-1 mb-6">
-          <h2 className="text-2xl md:text-3xl font-black tracking-tight">{profile.displayName || profile.username}</h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-2xl md:text-3xl font-black tracking-tight">{profile.displayName || profile.username}</h2>
+            {profile.isVerified && <CheckCircle size={20} className="text-blue-500 fill-blue-500/10" />}
+            {profile.isSuperAdmin && <Shield size={20} className="text-amber-500 fill-amber-500/10" />}
+          </div>
           <p className="text-gray-500 font-medium">@{profile.username}</p>
         </div>
 
@@ -260,3 +264,4 @@ function UserPage() {
 }
 
 export default UserPage;
+

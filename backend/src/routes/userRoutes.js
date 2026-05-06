@@ -11,7 +11,7 @@ const createError = require('http-errors');
 router.get('/search', checkAuth, async(req, res, next) => {
     try {
         const result = await db.query(
-            `SELECT id_user, username, "displayName", bio, "createdAt", "isSuperAdmin" FROM users WHERE username ILIKE $1 OR "displayName" ILIKE $1 LIMIT 50`, 
+            `SELECT id_user, username, "displayName", bio, "createdAt", "isSuperAdmin", "isVerified" FROM users WHERE username ILIKE $1 OR "displayName" ILIKE $1 LIMIT 50`,
             ['%' + (req.query.q || '') + '%']
         );
         return res.status(200).json(result.rows)
@@ -19,7 +19,6 @@ router.get('/search', checkAuth, async(req, res, next) => {
         return next(err);
     }
 });
-
 // tutti
 // GET /api/user/:username (Dettaglio utente specifico)
 router.get('/:username', checkAuth, async (req, res, next) => {
