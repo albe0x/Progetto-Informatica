@@ -4,13 +4,12 @@ const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
-    // Check if user has explicitly set dark mode in a previous session or if document already has it
-    if (document.documentElement.classList.contains('dark')) return 'dark';
-    return 'light';
+    return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
   });
 
   useEffect(() => {
     const root = window.document.documentElement;
+    console.log("Current theme:", theme);
     if (theme === 'dark') {
       root.classList.add('dark');
     } else {
@@ -18,16 +17,22 @@ export const ThemeProvider = ({ children }) => {
     }
   }, [theme]);
 
-  // Optional: Sync with system theme preference
+  // Sync with system theme preference
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handler = (e) => setTheme(e.matches ? 'dark' : 'light');
+    const handler = (e) => {
+        setTheme(e.matches ? 'dark' : 'light');
+    };
     mediaQuery.addEventListener('change', handler);
     return () => mediaQuery.removeEventListener('change', handler);
   }, []);
 
   const toggleTheme = () => {
-    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+    setTheme(prev => {
+        const next = prev === 'light' ? 'dark' : 'light';
+        console.log("Toggling theme to:", next);
+        return next;
+    });
   };
 
   return (
