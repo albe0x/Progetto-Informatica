@@ -2,8 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import { Send, Hash, Info, Plus, Search, X } from 'lucide-react';
 import api from '../../helpers/api';
 import Message from './Message';
+import { useAuth } from '../../context/AuthContext';
 
 const Chat = () => {
+  const { user: currentUser } = useAuth();
   const [chats, setChats] = useState([]);
   const [activeChat, setActiveChat] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -140,7 +142,7 @@ const Chat = () => {
       const res = await api.post(`/chat/${activeChat.id_chat}/messages`, {
         content: newMessage
       });
-      setMessages([...messages, res.data]);
+      setMessages([...messages, { ...res.data, username: currentUser.username }]);
       setNewMessage('');
     } catch (err) {
       console.error("Failed to send message:", err);
