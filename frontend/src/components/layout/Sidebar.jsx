@@ -1,8 +1,9 @@
 import { Home, Search, Bell, Mail, User, MoreHorizontal, Feather, X, Atom } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import UserButton from '../profile/UserButton';
 import CreatePost from '../posts/CreatePost';
+import { useClickOutside } from '../../helpers/useClickOutside';
 
 const SidebarItem = ({ icon: Icon, label, path, active }) => (
   <Link 
@@ -19,30 +20,12 @@ const SidebarItem = ({ icon: Icon, label, path, active }) => (
 
 const Sidebar = () => {
   const location = useLocation();
-  // State to manage the post creation modal visibility
   const [showPostMenu, setShowPostMenu] = useState(false);
   const postMenuRef = useRef(null);
 
-  // useEffect: Standard way to handle side effects like global event listeners
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (postMenuRef.current && !postMenuRef.current.contains(event.target)) {
-        setShowPostMenu(false);
-      }
-    };
-
-    if (showPostMenu) {
-      document.addEventListener("mousedown", handleClickOutside);
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.body.style.overflow = 'unset';
-    };
-  }, [showPostMenu]);
+  useClickOutside(postMenuRef, () => {
+    if (showPostMenu) setShowPostMenu(false);
+  });
 
   return (
     <div className="flex flex-col h-screen sticky top-0 px-2 xl:px-4 py-4 border-r border-gray-200 dark:border-gray-800 w-fit xl:w-64 bg-white dark:bg-black overflow-visible z-20">
@@ -62,15 +45,12 @@ const Sidebar = () => {
 
       {/* 3. Post Trigger Section */}
       <div className="mt-8">
-        {/* Desktop Large Button */}
         <button 
           onClick={() => setShowPostMenu(true)}
           className="hidden xl:block bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 w-full rounded-full text-xl shadow-lg transition-all active:scale-95"
         >
           Post
         </button>
-
-        {/* Mobile Circle Button */}
         <button 
           onClick={() => setShowPostMenu(true)}
           className="xl:hidden bg-blue-500 p-3 text-white rounded-full flex justify-center w-fit mx-auto shadow-lg active:scale-95"
@@ -85,7 +65,6 @@ const Sidebar = () => {
           ref={postMenuRef}
           className="bg-white dark:bg-black w-full max-w-[600px] rounded-3xl shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-800"
         >
-          {/* HEADER WITH TITLE */}
           <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100 dark:border-gray-800">
             <div className="flex items-center gap-4">
               <button 
@@ -97,14 +76,11 @@ const Sidebar = () => {
               <span className="font-bold text-lg">Create New Post</span>
             </div>
           </div>
-
-          {/* THE COMPONENT */}
           <CreatePost onPostCreated={() => setShowPostMenu(false)} />
         </div>
       </div>
     )}
 
-      {/* 4. User Profile Toggle */}
       <div className="mt-auto pt-4">
         <UserButton />
       </div>

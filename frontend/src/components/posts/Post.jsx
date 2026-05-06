@@ -5,11 +5,12 @@ import { useAuth } from '../../context/AuthContext';
 import { Trash2, Heart, MessageSquare, CheckCircle, Shield } from 'lucide-react';
 
 /**
- * Post Component: Displays a single social media post.
+ * Post Component: Displays a single social media post with interaction options.
  */
 function Post({ post }) {
-  console.log("Post data:", post);
   const { user: currentUser } = useAuth();
+  
+  // State management
   const [likes, setLikes] = useState(post.likes || 0);
   const [isLiked, setIsLiked] = useState(false);
   const [comments, setComments] = useState([]);
@@ -17,12 +18,13 @@ function Post({ post }) {
   const [showComments, setShowComments] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
 
+  // Computed values
   const hasImage = post.imageUrl && post.imageUrl.trim() !== '';
   const isOwner = currentUser && currentUser.id_user === post.id_user;
   const canDelete = isOwner || (currentUser && currentUser.isSuperAdmin);
 
+  // Fetch initial data
   useEffect(() => {
-    // Check if current user has already liked this post
     if (currentUser) {
         api.get(`/post/${post.id_post}/liked-status`).then(res => setIsLiked(res.data.liked));
     }
@@ -34,19 +36,13 @@ function Post({ post }) {
     }
   }, [showComments, post.id_post]);
 
+  // Handlers
   const handleLike = async () => {
     try {
       const res = await api.post(`/post/${post.id_post}/like`);
       setIsLiked(res.data.liked);
       setLikes(prev => res.data.liked ? prev + 1 : prev - 1);
-    } catch (err) { console.error(err); }
-  };
-
-  const handleFollow = async () => {
-    try {
-      await api.post(`/user/${post.id_user}/follow`);
-      // Optionally trigger re-fetch or UI update here if needed
-    } catch (err) { console.error("Follow error:", err); }
+    } catch (err) { console.error("Like error:", err); }
   };
 
   const handleComment = async (e) => {
@@ -54,9 +50,9 @@ function Post({ post }) {
     if (!newComment.trim()) return;
     try {
       const res = await api.post(`/post/${post.id_post}/comments`, { content: newComment });
-      setComments([...comments, { ...res.data, username: 'Tu' }]); // Semplificazione per feedback immediato
+      setComments([...comments, { ...res.data, username: 'Tu' }]);
       setNewComment('');
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error("Comment error:", err); }
   };
 
   const handleDelete = async () => {
@@ -64,7 +60,7 @@ function Post({ post }) {
     try {
       await api.delete(`/post/${post.id_post}`);
       setIsDeleted(true);
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error("Delete error:", err); }
   };
 
   if (isDeleted) return null;
@@ -73,12 +69,14 @@ function Post({ post }) {
     <div className="w-full border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-black hover:bg-gray-50/30 dark:hover:bg-white/[0.02] transition-colors">
       <div className="flex flex-col w-full">
         
-        {/* Post Body */}
+        {/* Post Content */}
         <div className="px-6 pt-10 pb-4">
           <div className="flex justify-between items-start mb-6">
             <h3 className="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white leading-tight">
               {post.title}
             </h3>
+            
+            {/* Header Meta Actions */}
             <div className="flex items-center gap-4">
               {canDelete && (
                 <button onClick={handleDelete} className="text-gray-400 hover:text-red-500 transition-colors p-1">
@@ -103,14 +101,22 @@ function Post({ post }) {
           </div>
         )}
 
-        {/* Interaction Bar */}
+        {/* Interaction Bar: Like, Comments, User Link */}
         <div className="px-6 py-4 flex items-center gap-6 border-t border-gray-50 dark:border-gray-900/50">
-          <button onClick={handleLike} className={`flex items-center gap-2 text-sm font-bold transition-colors ${isLiked ? 'text-red-500' : 'text-gray-500 hover:text-red-500'}`}>
+          <button 
+            onClick={handleLike} 
+            className={`flex items-center gap-2 text-sm font-bold transition-colors ${isLiked ? 'text-red-500' : 'text-gray-500 hover:text-red-500'}`}
+          >
             <Heart size={18} fill={isLiked ? 'currentColor' : 'none'} /> {likes}
           </button>
-          <button onClick={() => setShowComments(!showComments)} className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-blue-500 transition-colors">
+          
+          <button 
+            onClick={() => setShowComments(!showComments)} 
+            className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-blue-500 transition-colors"
+          >
             <MessageSquare size={18} /> Commenti
           </button>
+          
           <Link to={`/profile/${post.username}`} className="ml-auto flex items-center gap-1 text-xs font-black text-blue-500 uppercase tracking-widest">
             @{post.username}
             {post.isVerified && <CheckCircle size={14} className="text-blue-500" />}
@@ -129,6 +135,7 @@ function Post({ post }) {
                 </div>
               ))}
             </div>
+            
             <form onSubmit={handleComment} className="flex gap-2">
               <input 
                 value={newComment} 

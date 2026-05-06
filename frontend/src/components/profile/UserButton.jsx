@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
-import { LogOut, MoreHorizontal, User, ShieldCheck, CheckCircle, Shield } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { LogOut, MoreHorizontal, User, CheckCircle, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useClickOutside } from '../../helpers/useClickOutside';
 
 /**
  * Sub-component for the circular User Avatar
@@ -35,16 +36,7 @@ const UserButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
 
-  // Close the menu if the user clicks anywhere else on the screen
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  useClickOutside(menuRef, () => setIsOpen(false));
 
   if (!user) return null;
 
