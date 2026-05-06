@@ -133,6 +133,14 @@ router.post('/:id_post/like', checkAuth, async (req, res, next) => {
     } catch(err) { return next(err); }
 });
 
+// GET /api/post/:id_post/liked-status (Check like status)
+router.get('/:id_post/liked-status', checkAuth, async (req, res, next) => {
+    try {
+        const checkLike = await db.query('SELECT 1 FROM post_likes WHERE id_post = $1 AND id_user = $2', [req.params.id_post, req.user.id_user]);
+        return res.json({ liked: checkLike.rowCount > 0 });
+    } catch(err) { return next(err); }
+});
+
 // GET /api/post/:id_post/comments (Lista commenti)
 router.get('/:id_post/comments', checkAuth, async (req, res, next) => {
     try {
