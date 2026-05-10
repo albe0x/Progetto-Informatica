@@ -11,10 +11,3 @@ const pool = new Pool({
 module.exports = {
   query: (text, params) => pool.query(text, params),
 };
-
-/*
-async function getUser() {
-  const res = await db.query('SELECT * FROM users WHERE nome = $1 AND cognome = $2 ', [1, 2]);
-  console.log(res.rows[0]);
-}
- */

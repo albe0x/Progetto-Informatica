@@ -1,4 +1,4 @@
-import { Home, Search, Bell, Mail, User, MoreHorizontal, Feather, X, Atom } from 'lucide-react';
+import { Home, Search, Mail, User, Feather, X, Atom } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import UserButton from '../profile/UserButton';
