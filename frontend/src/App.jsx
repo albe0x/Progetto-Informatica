@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import { ThemeProvider } from './context/ThemeContext';
 import MainLayout from './components/layout/MainLayout';
 import PostGrid from './components/posts/PostGrid';
 import PostExplore from './components/posts/PostExplore';
@@ -20,30 +19,28 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <Router>
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          
+          <Route path="/" element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }>
+            <Route index element={<PostGrid />} />
+            <Route path="explore" element={<PostExplore />} />
+            <Route path="notifications" element={<Notifications />} />
+            <Route path="messages" element={<Chat />} />
             
-            <Route path="/" element={
-              <ProtectedRoute>
-                <MainLayout />
-              </ProtectedRoute>
-            }>
-              <Route index element={<PostGrid />} />
-              <Route path="explore" element={<PostExplore />} />
-              <Route path="notifications" element={<Notifications />} />
-              <Route path="messages" element={<Chat />} />
-              
-              <Route path="profile" element={<UserPage />} />
-              <Route path="profile/:username" element={<UserPage />} />
-            </Route>
-          </Routes>
-        </Router>
-      </AuthProvider>
-    </ThemeProvider>
+            <Route path="profile" element={<UserPage />} />
+            <Route path="profile/:username" element={<UserPage />} />
+          </Route>
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 
