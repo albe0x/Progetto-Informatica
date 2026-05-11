@@ -10,11 +10,12 @@ A real-time chat application with posts and social features built with Node.js, 
 ## Features
 
 - 🔐 User authentication and authorization
-- 💬 Real-time chat with multiple users
-- 📝 Post creation and feed
+- 💬 Real-time chat with group management
+- 📝 Post creation, likes, and comments
 - 🔍 User search and profiles
-- 👤 User profiles with admin capabilities
-- ❤️ Post likes tracking
+- 👤 User profiles with verification and admin badges
+- 🤝 User follow system
+- 📥 Data portability (Export my data)
 
 ## Tech Stack
 
@@ -48,26 +49,28 @@ For detailed API endpoint documentation, see [API-endpoints.md](API-endpoints.md
 #### Authentication
 - `POST /api/auth/login` - User login
 - `POST /api/auth/logout` - User logout
-- `GET /api/auth/me` - Get current user
+- `GET /api/auth/me` - Get current session info
 
 #### Users
 - `GET /api/user/search` - Search users
-- `GET /api/user/:username` - Get user profile (includes `isSuperAdmin`)
+- `GET /api/user/:username` - Get user profile
 - `POST /api/user` - Create new user
 - `PUT /api/user` - Update user profile
+- `DELETE /api/user` - Delete account
+- `POST /api/user/:id_user/follow` - Follow/Unfollow user
 
 #### Posts
-- `GET /api/post` - Get recommended posts feed
-- `GET /api/post/user/:id_user` - Get user's posts
-- `GET /api/post/:id_post` - Get single post (includes `likes`)
+- `GET /api/post` - Recommended posts feed
 - `POST /api/post` - Create new post
+- `DELETE /api/post/:id_post` - Delete post (Proprietario o SuperAdmin)
+- `POST /api/post/:id_post/like` - Like/Unlike post
+- `POST /api/post/:id_post/comments` - Add comment
 
 #### Chat
-- `GET /api/chat` - Get user's chats
-- `GET /api/chat/:id_chat/members` - Get chat members
-- `GET /api/chat/:id_chat/messages` - Get chat messages
+- `GET /api/chat` - List user's chats
 - `POST /api/chat` - Create new chat
 - `POST /api/chat/:id_chat/messages` - Send message
+- `POST /api/chat/:id_chat/members` - Add members to chat
 
 ## Authentication
 
@@ -77,12 +80,15 @@ All protected routes require an `Authorization` header with the authentication t
 Authorization: <token>
 ```
 
-## Response Format
+## Admin Capabilities
 
-All responses are in JSON format with database field names as-is (camelCase/snake_case as defined in database schema).
+Users with `isSuperAdmin: true` (managed via database) can:
+- Delete any post.
+- Delete any user account.
+- View administrative indicators in the UI.
 
 ## Notes
 
-- GET endpoints return full data including `likes` (posts) and `isSuperAdmin` (users)
-- POST endpoints return minimal data (message and ID only)
-- PUT and DELETE endpoints for posts and users are not yet implemented (return 501)
+- GET endpoints return enriched data (likes, verification status, etc.)
+- DELETE endpoints are fully functional with permission checks.
+- PUT /api/post/:id_post is currently a placeholder.

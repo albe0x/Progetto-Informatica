@@ -47,7 +47,10 @@ Example:
 ```json
 {
   "id_user": 1,
-  "username": "alice"
+  "username": "alice",
+  "displayName": "Alice",
+  "isSuperAdmin": false,
+  "isVerified": true
 }
 ```
 
@@ -127,6 +130,18 @@ Example:
 }
 ```
 
+### `POST /api/chat/:id_chat/members`
+- Auth: required
+- Path param: `id_chat`
+- Request JSON:
+  - `members` (array of usernames, required)
+- Response (200):
+```json
+{
+  "message": "Members added successfully"
+}
+```
+
 ### `POST /api/chat/:id_chat/messages`
 - Auth: required
 - Path param: `id_chat`
@@ -168,7 +183,9 @@ Example:
     "content": "Post content",
     "likes": 5,
     "imageUrl": null,
-    "username": "alice"
+    "username": "alice",
+    "isSuperAdmin": false,
+    "isVerified": true
   }
 ]
 ```
@@ -187,12 +204,12 @@ Example:
     "content": "Post content",
     "likes": 5,
     "imageUrl": null,
-    "username": "alice"
+    "username": "alice",
+    "isSuperAdmin": false,
+    "isVerified": true
   }
 ]
 ```
-- Errors:
-  - `404` if no posts found for the user
 
 ### `GET /api/post/:id_post`
 - Auth: required
@@ -207,11 +224,11 @@ Example:
   "content": "Post content",
   "likes": 5,
   "imageUrl": null,
-  "username": "alice"
+  "username": "alice",
+  "isSuperAdmin": false,
+  "isVerified": true
 }
 ```
-- Errors:
-  - `404` if post not found
 
 ### `POST /api/post/`
 - Auth: required
@@ -238,21 +255,66 @@ Example:
 
 ### `PUT /api/post/:id_post`
 - Auth: required
-- Currently returns `501 Not Implemented`
-- No actual update behavior yet
+- **Not implemented** (returns 501)
 
 ### `DELETE /api/post/:id_post`
 - Auth: required
-- Currently returns `501 Not Implemented`
-- No actual deletion behavior yet
+- Path param: `id_post`
+- Users can delete their own posts. SuperAdmins can delete any post.
+- Response (200):
+```json
+{
+  "message": "Post eliminato"
+}
+```
+
+### `POST /api/post/:id_post/like`
+- Auth: required
+- Toggle like on a post
+- Response example:
+```json
+{
+  "liked": true
+}
+```
+
+### `GET /api/post/:id_post/liked-status`
+- Auth: required
+- Returns if the current user liked the post
+- Response example:
+```json
+{
+  "liked": true
+}
+```
+
+### `GET /api/post/:id_post/comments`
+- Auth: required
+- Returns comments for a post
+- Response example:
+```json
+[
+  {
+    "id_comment": 1,
+    "id_post": 10,
+    "id_user": 3,
+    "username": "bob",
+    "content": "Great post!",
+    "createdAt": "2026-05-11T10:00:00.000Z"
+  }
+]
+```
+
+### `POST /api/post/:id_post/comments`
+- Auth: required
+- Add a comment to a post
+- Request JSON:
+  - `content` (string, required)
+- Response (201): the created comment object
 
 ---
 
 ## User Endpoints
-
-### `GET /api/user/`
-- Auth: required
-- Currently returns `501 Not Implemented`
 
 ### `GET /api/user/search?q=...`
 - Auth: required
@@ -267,7 +329,8 @@ Example:
     "displayName": "Bob",
     "bio": "Developer",
     "createdAt": "2026-01-01T00:00:00.000Z",
-    "isSuperAdmin": false
+    "isSuperAdmin": false,
+    "isVerified": false
   }
 ]
 ```
@@ -284,7 +347,8 @@ Example:
   "displayName": "Bob",
   "bio": "Developer",
   "createdAt": "2026-01-01T00:00:00.000Z",
-  "isSuperAdmin": false
+  "isSuperAdmin": false,
+  "isVerified": false
 }
 ```
 
@@ -295,16 +359,6 @@ Example:
   - `password` (string, required)
   - `displayName` (string, optional)
   - `bio` (string, optional)
-
-Example:
-```json
-{
-  "username": "alice",
-  "password": "secret",
-  "displayName": "Alice",
-  "bio": "I love coding"
-}
-```
 - Response (201):
 ```json
 {
@@ -314,19 +368,8 @@ Example:
 
 ### `PUT /api/user/`
 - Auth: required
-- Request JSON may include any of:
-  - `username`
-  - `password`
-  - `displayName`
-  - `bio`
-
-Example:
-```json
-{
-  "displayName": "Alice Rossi",
-  "bio": "Aggiornata bio"
-}
-```
+- Update current user profile
+- Request JSON may include: `username`, `password`, `displayName`, `bio`
 - Response (200):
 ```json
 {
@@ -334,13 +377,54 @@ Example:
 }
 ```
 
+### `DELETE /api/user/`
+- Auth: required
+- Delete the currently authenticated account.
+- Response (200):
+```json
+{
+  "message": "Account eliminato correttamente"
+}
+```
+
 ### `DELETE /api/user/:username`
 - Auth: required
-- Currently returns `501 Not Implemented`
+- Delete a specific user. Requires being the user themselves or a SuperAdmin.
+- Response (200):
+```json
+{
+  "message": "Account eliminato"
+}
+```
+
+### `POST /api/user/:id_user/follow`
+- Auth: required
+- Toggle follow status for a user
+- Response example:
+```json
+{
+  "followed": true
+}
+```
+
+### `GET /api/user/:id_user/following-status`
+- Auth: required
+- Check if current user follows the specified user
+- Response example:
+```json
+{
+  "followed": true
+}
+```
+
+### `GET /api/user/export/me`
+- Auth: required
+- Returns a JSON export of all user data (profile, posts, comments)
+- Response: JSON object with `profile`, `posts`, `comments`, and metadata.
 
 ---
 
 ## Notes
 - Protected routes require header: `Authorization: <token>`
 - Server listens on port `3000`
-- Routes with `501 Not Implemented` are placeholders and do not perform actual delete/update operations yet.
+- SuperAdmins have special permissions for deleting posts and user accounts.
