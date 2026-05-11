@@ -30,10 +30,14 @@ Il progetto è una piattaforma social completa che permette agli utenti di inter
 -   **Database:** PostgreSQL
 -   **DevOps:** Docker + Docker Compose + Adminer (per la gestione DB)
 
-## 🚦 Endpoint API Disponibili
+## 🚦 Accesso all'Applicazione
 
-L'API è accessibile su `http://localhost:3000/api` (locale) o `https://api.albe0x.com/api` (produzione).
-Modificabile dal .env
+L'applicazione è accessibile ai seguenti indirizzi:
+
+-   **Frontend:** `http://localhost:5173` (locale) o `https://app.albe0x.com` (produzione)
+-   **API:** `http://localhost:3000/api` (locale) o `https://api.albe0x.com/api` (produzione)
+
+Tutti gli endpoint API sono documentati in dettaglio in [API-endpoints.md](API-endpoints.md).
 
 ### Autenticazione
 - `POST /auth/login` - Effettua il login.
