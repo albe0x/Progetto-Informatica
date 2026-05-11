@@ -1,94 +1,84 @@
 # Progetto-Informatica
 
-A real-time chat application with posts and social features built with Node.js, React, PostgreSQL, and Docker.
+Un'applicazione di chat in tempo reale con post e funzionalità social, costruita con Node.js, React, PostgreSQL e Docker.
 
-## Live Deployment
+## 🚀 Come Funziona il Progetto
 
-- **App**: https://app.albe0x.com/
-- **API**: https://api.albe0x.com/
+Il progetto è una piattaforma social completa che permette agli utenti di interagire attraverso messaggi diretti, chat di gruppo e un feed di post.
 
-## Features
+1.  **Backend (Node.js/Express):** Gestisce la logica di business, l'autenticazione tramite token (salvati nel database) e le interazioni con il database PostgreSQL. Utilizza un'architettura a rotte per separare le responsabilità (auth, user, post, chat).
+2.  **Frontend (React/Vite):** Un'interfaccia moderna e reattiva costruita con Tailwind CSS. Utilizza i Context di React per gestire lo stato dell'autenticazione e fornisce un'esperienza utente fluida.
+3.  **Database (PostgreSQL):** Memorizza utenti, post, commenti, like, relazioni di follow e messaggi di chat.
+4.  **Docker:** L'intero ecosistema è containerizzato, rendendo il deploy e lo sviluppo locale estremamente semplici e consistenti.
 
-- 🔐 User authentication and authorization
-- 💬 Real-time chat with group management
-- 📝 Post creation, likes, and comments
-- 🔍 User search and profiles
-- 👤 User profiles with verification and admin badges
-- 🤝 User follow system
-- 📥 Data portability (Export my data)
+## ✨ Funzionalità Implementate
 
-## Tech Stack
+-   🔐 **Autenticazione Sicura:** Registrazione, login e logout con gestione dei token di sessione.
+-   💬 **Chat in Tempo Reale:** Creazione di chat, messaggistica e gestione dei membri del gruppo.
+-   📝 **Feed di Post:** Creazione di post con supporto per titoli, contenuti e immagini.
+-   ❤️ **Interazioni Social:** Sistema di "Like" e commenti sui post.
+-   🤝 **Sistema di Follow:** Segui altri utenti per rimanere aggiornato sulle loro attività.
+-   🔍 **Ricerca Utenti:** Trova altri utenti tramite username o nome visualizzato.
+-   👤 **Profili Utente:** Pagine profilo dettagliate con badge di verifica e stato Admin.
+-   📥 **Portabilità dei Dati:** Funzionalità per esportare tutti i propri dati in formato JSON.
+-   🛡️ **Ruoli Admin:** Supporto per SuperAdmin con poteri di moderazione (eliminazione post/utenti).
 
-- **Backend**: Node.js + Express
-- **Frontend**: React + Vite
-- **Database**: PostgreSQL
-- **Deployment**: Docker + Docker Compose
+## 🛠️ Tech Stack
 
-## Quick Start
+-   **Backend:** Node.js + Express
+-   **Frontend:** React + Vite + Tailwind CSS + Lucide React
+-   **Database:** PostgreSQL
+-   **DevOps:** Docker + Docker Compose + Adminer (per la gestione DB)
 
-### Prerequisites
-- Docker and Docker Compose installed
+## 🚦 Endpoint API Disponibili
 
-### Run the Application
+L'API è accessibile su `http://localhost:3000/api` (locale) o `https://api.albe0x.com/api` (produzione).
+Modificabile dal .env
 
+### Autenticazione
+- `POST /auth/login` - Effettua il login.
+- `POST /auth/logout` - Effettua il logout.
+- `GET /auth/me` - Ottiene le info sulla sessione corrente.
+
+### Utenti
+- `GET /user/search?q=...` - Cerca utenti.
+- `GET /user/:username` - Ottiene il profilo pubblico di un utente.
+- `POST /user` - Registra un nuovo utente.
+- `PUT /user` - Modifica il proprio profilo.
+- `DELETE /user` - Elimina il proprio account.
+- `POST /user/:id_user/follow` - Segui/Smetti di seguire un utente.
+- `GET /user/export/me` - Esporta i dati personali.
+
+### Post
+- `GET /post` - Ottiene il feed dei post raccomandati.
+- `POST /post` - Crea un nuovo post.
+- `GET /post/:id_post` - Dettaglio di un singolo post.
+- `DELETE /post/:id_post` - Elimina un post (Proprietario o SuperAdmin).
+- `POST /post/:id_post/like` - Metti/Togli like a un post.
+- `POST /post/:id_post/comments` - Aggiungi un commento.
+
+### Chat
+- `GET /chat` - Lista delle chat dell'utente.
+- `POST /chat` - Crea una nuova chat (singola o di gruppo).
+- `GET /chat/:id_chat/messages` - Recupera la cronologia messaggi.
+- `POST /chat/:id_chat/messages` - Invia un messaggio.
+- `POST /chat/:id_chat/members` - Aggiunge membri a una chat esistente.
+
+## 📦 Installazione e Avvio Rapido
+
+### Prerequisiti
+- Docker e Docker Compose installati.
+
+### Avvio
 ```bash
-docker-compose up
+docker-compose up -d --build
 ```
+Questo comando avvierà:
+- **Database:** PostgreSQL sulla porta 5432.
+- **Backend:** API sulla porta 3000.
+- **Frontend:** Applicazione React sulla porta 5173 (mappata su 80 nel container).
+- **Adminer:** Gestore database sulla porta 3001.
 
-This will start:
-- PostgreSQL database on port 5432
-- Backend API on port 3000
-- Frontend application on port 5173
-
-## API Documentation
-
-For detailed API endpoint documentation, see [API-endpoints.md](API-endpoints.md)
-
-### Main Endpoints
-
-#### Authentication
-- `POST /api/auth/login` - User login
-- `POST /api/auth/logout` - User logout
-- `GET /api/auth/me` - Get current session info
-
-#### Users
-- `GET /api/user/search` - Search users
-- `GET /api/user/:username` - Get user profile
-- `POST /api/user` - Create new user
-- `PUT /api/user` - Update user profile
-- `DELETE /api/user` - Delete account
-- `POST /api/user/:id_user/follow` - Follow/Unfollow user
-
-#### Posts
-- `GET /api/post` - Recommended posts feed
-- `POST /api/post` - Create new post
-- `DELETE /api/post/:id_post` - Delete post (Proprietario o SuperAdmin)
-- `POST /api/post/:id_post/like` - Like/Unlike post
-- `POST /api/post/:id_post/comments` - Add comment
-
-#### Chat
-- `GET /api/chat` - List user's chats
-- `POST /api/chat` - Create new chat
-- `POST /api/chat/:id_chat/messages` - Send message
-- `POST /api/chat/:id_chat/members` - Add members to chat
-
-## Authentication
-
-All protected routes require an `Authorization` header with the authentication token:
-
-```
-Authorization: <token>
-```
-
-## Admin Capabilities
-
-Users with `isSuperAdmin: true` (managed via database) can:
-- Delete any post.
-- Delete any user account.
-- View administrative indicators in the UI.
-
-## Notes
-
-- GET endpoints return enriched data (likes, verification status, etc.)
-- DELETE endpoints are fully functional with permission checks.
-- PUT /api/post/:id_post is currently a placeholder.
+## 📝 Note
+Tutti gli endpoint protetti richiedono l'header `Authorization: <token>`.
+I SuperAdmin vengono definiti direttamente nel database tramite il flag `isSuperAdmin`.
