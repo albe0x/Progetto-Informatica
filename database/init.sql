@@ -22,7 +22,6 @@ CREATE TABLE posts (
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabella delle conversazioni
 CREATE TABLE chats (
     id_chat SERIAL PRIMARY KEY,
     name TEXT NOT NULL
@@ -35,24 +34,21 @@ CREATE TABLE chatmembers (
     PRIMARY KEY (id_chat, id_user)
 );
 
--- Tabella dei messaggi (aggiornata)
 CREATE TABLE messages (
     id_message SERIAL PRIMARY KEY,
-    id_chat INT NOT NULL REFERENCES chats(id_chat) ON DELETE CASCADE, -- IL PONTE
+    id_chat INT NOT NULL REFERENCES chats(id_chat) ON DELETE CASCADE,
     id_sender INT NOT NULL REFERENCES users(id_user) ON DELETE CASCADE,
     content TEXT NOT NULL,
     "isRead" BOOLEAN DEFAULT FALSE,
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Nuova tabella per i like
 CREATE TABLE post_likes (
     id_post INT NOT NULL REFERENCES posts(id_post) ON DELETE CASCADE,
     id_user INT NOT NULL REFERENCES users(id_user) ON DELETE CASCADE,
     PRIMARY KEY (id_post, id_user)
 );
 
--- Nuova tabella per i commenti
 CREATE TABLE post_comments (
     id_comment SERIAL PRIMARY KEY,
     id_post INT NOT NULL REFERENCES posts(id_post) ON DELETE CASCADE,
@@ -61,7 +57,6 @@ CREATE TABLE post_comments (
     "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabella per i follow
 CREATE TABLE follows (
     follower_id INT NOT NULL REFERENCES users(id_user) ON DELETE CASCADE,
     followed_id INT NOT NULL REFERENCES users(id_user) ON DELETE CASCADE,
