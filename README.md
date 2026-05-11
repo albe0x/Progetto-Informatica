@@ -37,7 +37,6 @@ L'applicazione è accessibile ai seguenti indirizzi:
 -   **Frontend:** `http://localhost:5173` (locale) o `https://app.albe0x.com` (produzione)
 -   **API:** `http://localhost:3000/api` (locale) o `https://api.albe0x.com/api` (produzione)
 
-Tutti gli endpoint API sono documentati in dettaglio in [API-endpoints.md](API-endpoints.md).
 
 ### Autenticazione
 - `POST /auth/login` - Effettua il login.
@@ -80,9 +79,11 @@ docker-compose up -d --build
 Questo comando avvierà:
 - **Database:** PostgreSQL sulla porta 5432.
 - **Backend:** API sulla porta 3000.
-- **Frontend:** Applicazione React sulla porta 5173 (mappata su 80 nel container).
-- **Adminer:** Gestore database sulla porta 3001.
+- **Frontend:** Applicazione React sulla porta 5173.
+- **Adminer:** Gestore database sulla porta 3001. (username, password, db_name)
 
 ## 📝 Note
 Tutti gli endpoint protetti richiedono l'header `Authorization: <token>`.
 I SuperAdmin vengono definiti direttamente nel database tramite il flag `isSuperAdmin`.
+
+

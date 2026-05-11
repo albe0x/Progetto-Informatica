@@ -115,7 +115,7 @@ router.delete('/:id_post', checkAuth, async (req, res, next) => {
 });
 
 
-// --- NUOVI ENDPOINT PER LIKE E COMMENTI ---
+// ENDPOINT PER LIKE E COMMENTI
 
 // POST /api/post/:id_post/like (Toggle Like)
 router.post('/:id_post/like', checkAuth, async (req, res, next) => {
