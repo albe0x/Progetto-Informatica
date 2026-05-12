@@ -27,6 +27,7 @@ const Login = () => {
           <Atom className="text-blue-500" size={48} />
         </div>
         <h2 className="text-3xl font-bold text-center">Sign in</h2>
+        {error && <p className="text-red-500 text-center bg-red-100 dark:bg-red-900/20 p-2 rounded">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
