@@ -114,7 +114,7 @@ router.get('/:id_user/following-status', checkAuth, async (req, res, next) => {
     } catch(err) { return next(err); }
 });
 
-// GET /api/user/export (Export dei dati dell'utente)
+// GET /api/user/export
 router.get('/export/me', checkAuth, async (req, res, next) => {
     try {
         const id_user = req.user.id_user;
@@ -137,7 +137,7 @@ router.get('/export/me', checkAuth, async (req, res, next) => {
 });
 
 // solo utente stesso
-// DELETE /api/user/ (Cancellazione account)
+// DELETE /api/user/
 router.delete('/', checkAuth, async (req, res, next) => {
     try {
         await db.query('DELETE FROM users WHERE id_user = $1', [req.user.id_user]);
@@ -145,7 +145,7 @@ router.delete('/', checkAuth, async (req, res, next) => {
     } catch(err) { return next(err); }
 });
 
-// DELETE /api/user/:username (Mantenuto per compatibilità, punta al nuovo)
+// DELETE /api/user/:username 
 router.delete('/:username', checkAuth, async (req, res, next) => {
     if (req.user.username !== req.params.username && !req.user.isSuperAdmin) {
         return next(createError(403, "Non puoi eliminare questo account"));
