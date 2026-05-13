@@ -28,6 +28,12 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
+const PORT = 3000;
+
+app.get('/api/', (req, res) => {
+    res.status(200).json({ status: 'OK', uptime: process.uptime() });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

@@ -1,4 +1,4 @@
-import { Home, Search, Mail, User, Feather, X, Atom } from 'lucide-react';
+import { Home, Search, Mail, User, Feather, X, Atom, Sun, Moon } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import UserButton from '../profile/UserButton';
@@ -15,7 +15,6 @@ const SidebarItem = ({ icon: Icon, label, path, active }) => (
     <span className="text-xl hidden xl:block">{label}</span>
   </Link>
 );
-
 const Sidebar = () => {
   const location = useLocation();
   const [showPostMenu, setShowPostMenu] = useState(false);
@@ -39,7 +38,7 @@ const Sidebar = () => {
     <div className="flex flex-col h-screen sticky top-0 px-2 xl:px-4 py-4 border-r border-gray-200 dark:border-gray-800 w-fit xl:w-64 bg-white dark:bg-black overflow-visible z-20">
       
       {/* 1. Logo */}
-      <div className="flex items-center justify-between p-3 mb-4">
+      <div className="flex items-center p-3 mb-4">
         <div className="rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors w-fit">
           <Atom className="text-blue-500" size={32} />
         </div>

@@ -76,7 +76,7 @@ function UserPage() {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', 'i_miei_dati.json');
+      link.setAttribute('download', 'my_data.json');
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -84,7 +84,7 @@ function UserPage() {
   };
 
   const handleDeleteAccount = async () => {
-    if (!window.confirm("Sei sicuro di voler eliminare DEFINITIVAMENTE il tuo account? Questa azione non è reversibile.")) return;
+    if (!window.confirm("Are you sure you want to PERMANENTLY delete your account? This action cannot be undone.")) return;
     try {
       await api.delete('/user/');
       logout();
@@ -180,10 +180,10 @@ function UserPage() {
         {isOwnProfile && (
           <div className="flex gap-4 mb-6">
             <button onClick={handleExportData} className="flex items-center gap-2 text-xs font-bold text-gray-500 hover:text-blue-500">
-              <Download size={16} /> Esporta i miei dati
+              <Download size={16} /> Export my data
             </button>
             <button onClick={handleDeleteAccount} className="flex items-center gap-2 text-xs font-bold text-gray-500 hover:text-red-500">
-              <Trash2 size={16} /> Elimina account
+              <Trash2 size={16} /> Delete account
             </button>
           </div>
         )}
@@ -191,7 +191,7 @@ function UserPage() {
         <div className="flex flex-wrap gap-6 text-gray-500 text-sm font-medium">
           <div className="flex items-center gap-1.5">
             <Calendar size={18} className="text-blue-500" />
-            <span>Joined {new Date(profile.createdAt).toLocaleDateString()}</span>
+            <span>Joined {new Date(profile.createdAt).toLocaleDateString('en-GB')}</span>
           </div>
         </div>
       </div>
@@ -223,7 +223,7 @@ function UserPage() {
       {/* Edit Profile Modal */}
       {isEditModalOpen && (
         <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-start justify-center pt-[10vh] px-4">
-          <div className="bg-white dark:bg-black w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-800">
+          <div className="bg-white dark:bg-black w-full max-md rounded-2xl shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-800">
             <form onSubmit={handleUpdateProfile}>
               <div className="p-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
                 <div className="flex items-center gap-4">

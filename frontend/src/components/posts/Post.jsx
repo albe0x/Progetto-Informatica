@@ -84,7 +84,7 @@ function Post({ post }) {
                 </button>
               )}
               <span className="text-[10px] text-gray-400 font-mono uppercase bg-gray-100 dark:bg-gray-900 px-2 py-1 rounded">
-                {new Date(post.createdAt).toLocaleDateString()}
+                {new Date(post.createdAt).toLocaleDateString('en-GB')}
               </span>
             </div>
           </div>
