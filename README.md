@@ -1,89 +1,60 @@
-# Progetto-Informatica
+# Progetto Informatica
 
-Un'applicazione di chat in tempo reale con post e funzionalità social, costruita con Node.js, React, PostgreSQL e Docker.
+Chat e social network in tempo reale sviluppato con Node.js, React, PostgreSQL e Docker.
 
-## 🚀 Come Funziona il Progetto
+---
 
-Il progetto è una piattaforma social completa che permette agli utenti di interagire attraverso messaggi diretti, chat di gruppo e un feed di post.
+## Architettura e Tech Stack
 
-1.  **Backend (Node.js/Express):** Gestisce la logica di business, l'autenticazione tramite token (salvati nel database) e le interazioni con il database PostgreSQL. Utilizza un'architettura a rotte per separare le responsabilità (auth, user, post, chat).
-2.  **Frontend (React/Vite):** Un'interfaccia moderna e reattiva costruita con Tailwind CSS. Utilizza i Context di React per gestire lo stato dell'autenticazione e fornisce un'esperienza utente fluida.
-3.  **Database (PostgreSQL):** Memorizza utenti, post, commenti, like, relazioni di follow e messaggi di chat.
-4.  **Docker:** L'intero ecosistema è containerizzato, rendendo il deploy e lo sviluppo locale estremamente semplici e consistenti.
+* **Backend:** Node.js + Express. Logica di business, rotte separate e autenticazione tramite token.
+* **Frontend:** React + Vite + Tailwind. Interfaccia reattiva con gestione dello stato tramite Context.
+* **Database:** PostgreSQL. Archiviazione dati utenti, post, commenti, interazioni e messaggi.
+* **DevOps:** Docker + Docker Compose + Adminer per la gestione locale.
 
-## ✨ Funzionalità Implementate
+---
 
--   🔐 **Autenticazione Sicura:** Registrazione, login e logout con gestione dei token di sessione.
--   💬 **Chat in Tempo Reale:** Creazione di chat, messaggistica e gestione dei membri del gruppo.
--   📝 **Feed di Post:** Creazione di post con supporto per titoli, contenuti e immagini.
--   ❤️ **Interazioni Social:** Sistema di "Like" e commenti sui post.
--   🤝 **Sistema di Follow:** Segui altri utenti per rimanere aggiornato sulle loro attività.
--   🔍 **Ricerca Utenti:** Trova altri utenti tramite username o nome visualizzato.
--   👤 **Profili Utente:** Pagine profilo dettagliate con badge di verifica e stato Admin.
--   📥 **Portabilità dei Dati:** Funzionalità per esportare tutti i propri dati in formato JSON.
--   🛡️ **Ruoli Admin:** Supporto per SuperAdmin con poteri di moderazione (eliminazione post/utenti).
+## Endpoint API
 
-## 🛠️ Tech Stack
-
--   **Backend:** Node.js + Express
--   **Frontend:** React + Vite + Tailwind CSS + Lucide React
--   **Database:** PostgreSQL
--   **DevOps:** Docker + Docker Compose + Adminer (per la gestione DB)
-
-## 🚦 Accesso all'Applicazione
-
-L'applicazione è accessibile ai seguenti indirizzi:
-
--   **Frontend:** `http://localhost:5173` (locale) o `https://app.albe0x.com` (produzione)
--   **API:** `http://localhost:3000/api` (locale) o `https://api.albe0x.com/api` (produzione)
-
+Tutti gli endpoint protetti richiedono l'header `Authorization: <token>`.
 
 ### Autenticazione
-- `POST /auth/login` - Effettua il login.
-- `POST /auth/logout` - Effettua il logout.
-- `GET /auth/me` - Ottiene le info sulla sessione corrente.
+* `POST /auth/login` - Login utente
+* `POST /auth/logout` - Logout utente
+* `GET /auth/me` - Info sessione corrente
 
 ### Utenti
-- `GET /user/search?q=...` - Cerca utenti.
-- `GET /user/:username` - Ottiene il profilo pubblico di un utente.
-- `POST /user` - Registra un nuovo utente.
-- `PUT /user` - Modifica il proprio profilo.
-- `DELETE /user` - Elimina il proprio account.
-- `POST /user/:id_user/follow` - Segui/Smetti di seguire un utente.
-- `GET /user/export/me` - Esporta i dati personali.
+* `GET /user/search?q=...` - Ricerca utenti
+* `GET /user/:username` - Profilo pubblico utente
+* `POST /user` - Registrazione nuovo utente
+* `PUT /user` - Modifica profilo
+* `DELETE /user` - Eliminazione account
+* `POST /user/:id_user/follow` - Segui/Smetti di seguire utente
+* `GET /user/export/me` - Esportazione dati personali JSON
 
 ### Post
-- `GET /post` - Ottiene il feed dei post raccomandati.
-- `POST /post` - Crea un nuovo post.
-- `GET /post/:id_post` - Dettaglio di un singolo post.
-- `DELETE /post/:id_post` - Elimina un post (Proprietario o SuperAdmin).
-- `POST /post/:id_post/like` - Metti/Togli like a un post.
-- `POST /post/:id_post/comments` - Aggiungi un commento.
+* `GET /post` - Feed post raccomandati
+* `POST /post` - Creazione nuovo post
+* `GET /post/:id_post` - Dettaglio singolo post
+* `DELETE /post/:id_post` - Eliminazione post (Autore o SuperAdmin)
+* `POST /post/:id_post/like` - Inserimento/Rimozione like
+* `POST /post/:id_post/comments` - Aggiunta commento
 
 ### Chat
-- `GET /chat` - Lista delle chat dell'utente.
-- `POST /chat` - Crea una nuova chat (singola o di gruppo).
-- `GET /chat/:id_chat/messages` - Recupera la cronologia messaggi.
-- `POST /chat/:id_chat/messages` - Invia un messaggio.
-- `POST /chat/:id_chat/members` - Aggiunge membri a una chat esistente.
+* `GET /chat` - Lista delle chat dell'utente
+* `POST /chat` - Nuova chat (singola o gruppo)
+* `GET /chat/:id_chat/messages` - Cronologia messaggi
+* `POST /chat/:id_chat/messages` - Invio messaggio
+* `POST /chat/:id_chat/members` - Aggiunta membri alla chat
 
-## 📦 Installazione e Avvio Rapido
+---
 
-### Prerequisiti
-- Docker e Docker Compose installati.
+## Installazione e Link
 
-### Avvio
+### URL di riferimento
+* **Frontend:** `http://localhost:5173` (Locale) | `https://app.albe0x.com` (Produzione)
+* **API:** `http://localhost:3000/api` (Locale) | `https://api.albe0x.com/api` (Produzione)
+* **Adminer:** `http://localhost:3001`
+
+### Avvio rapido
 ```bash
 docker-compose up -d --build
-```
-Questo comando avvierà:
-- **Database:** PostgreSQL sulla porta 5432.
-- **Backend:** API sulla porta 3000.
-- **Frontend:** Applicazione React sulla porta 5173.
-- **Adminer:** Gestore database sulla porta 3001. (username, password, db_name)
-
-## 📝 Note
-Tutti gli endpoint protetti richiedono l'header `Authorization: <token>`.
-I SuperAdmin vengono definiti direttamente nel database tramite il flag `isSuperAdmin`.
-
-
