@@ -57,4 +57,4 @@ Tutti gli endpoint protetti richiedono l'header `Authorization: <token>`.
 
 ### Avvio rapido
 ```bash
-docker-compose up -d --build
+docker compose up -d --build
